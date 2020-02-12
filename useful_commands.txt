@@ -1,0 +1,2 @@
+source venv/bin/activate	#Required to work in the virtual environment
+deactivate					#Exits the virtual environment
