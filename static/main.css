@@ -1,0 +1,48 @@
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+}
+
+div {
+  color: #1DA1F2;
+  display: flex;
+  font-size: 61px;
+  justify-content: center;
+  margin: 30px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+td {
+  font-size: 20px;
+}
+
+input {
+  width: 150px;
+  height: 30px;
+  margin: 10px;
+}
+
+.button-styles {
+  font-size: 35px;
+  font-family: system-ui;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  width: 175px;
+  background-color: #f9002fc7;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}

@@ -1,9 +1,14 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-	return 'Hello, World!'
+@app.route('/homepage.html')
+def root():
+  return render_template('homepage.html')
+
+@app.route('/signup.html')
+def signup():
+    return render_template('signup.html')
 
 if __name__ == '__main__':
     app.run()
