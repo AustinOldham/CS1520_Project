@@ -1,12 +1,13 @@
 from main import app
 
 @app.route('/')
-def hello_world():
-	return "Modular test"
+@app.route('/homepage.html')
+def root():
+  return render_template('homepage.html')
 
-@app.route('/signup')
+@app.route('/signup.html')
 def signup():
-	return "Sign up placeholder"
+    return render_template('signup.html')
 
 @app.route('/signin')
 def signin():
