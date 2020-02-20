@@ -17,10 +17,23 @@ def signup():
 	return render_template('signup.html')
 
 
-@app.route('/signin')
+@app.route('/signin.html')
 def signin():
-	return "Sign in placeholder"
+	return render_template('signin.html')
 
+
+@app.route('/signin_user', methods=['POST'])
+def signin_user():
+	username = request.form.get('username')
+	password = request.form.get('password')
+	passwordhash = data.get_password_hash(password)
+	user = data.load_user(username, passwordhash)
+	if user:
+		session['user'] = user.username
+		return redirect('/profile/{}'.format(username))
+	else:
+		# return show_login_page()
+		return redirect('/signin.html')
 
 @app.route('/profile/<username>')
 def profile_page(username):
