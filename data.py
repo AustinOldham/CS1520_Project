@@ -5,7 +5,7 @@ import hashlib
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
 _PROJECT_ID = 'roommate-tinder'
-_USER_ENTITY = 'user'
+_USER_ENTITY = 'roommate_user'
 
 
 class User(object):
@@ -84,7 +84,7 @@ def save_user(user, passwordhash):
     entity['email'] = user.email
     entity['passwordhash'] = passwordhash
     entity['about'] = ''
-    entity['completions'] = []
+    # entity['completions'] = []
     client.put(entity)
 
 
@@ -109,7 +109,7 @@ def create_data():
         'passwordhash': '',
         'email': '',
         'about': '',
-        'completions': [],
+        # 'completions': [],
     })
     client.put(entity)
 
