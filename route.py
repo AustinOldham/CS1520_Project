@@ -47,5 +47,4 @@ def register_user():
 		passwordhash = data.get_password_hash(password1)
 		data.save_user(user, passwordhash)
 		session['user'] = user.username
-		return redirect('/profile/<username>')
-
+		return redirect('/profile/{}'.format(username))
