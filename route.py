@@ -22,6 +22,11 @@ def signin():
 	return render_template('signin.html')
 
 
+@app.route('/editprofile.html')
+def editprofile():
+    return render_template('editprofile.html')
+
+
 @app.route('/signin_user', methods=['POST'])
 def signin_user():
 	username = request.form.get('username')
@@ -60,4 +65,16 @@ def register_user():
 		passwordhash = data.get_password_hash(password1)
 		data.save_user(user, passwordhash)
 		session['user'] = user.username
-		return redirect('/profile/{}'.format(username))
+		return redirect('/editprofile.html')
+
+
+@app.route('/updateprofile', methods=['POST'])
+def update_profile():
+    firstname = request.form.get('firstname')
+    lastname = request.form.get('lastname')
+    age = request.form.get('age')
+    gender = request.form.get('gender')
+    bio = request.form.get('bio')
+    username = session['user']
+    data.save_user_profile(username, firstname, lastname, age, gender, bio)
+    return redirect('/profile/{}'.format(username))

@@ -4,21 +4,33 @@ import hashlib
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
+# Everyone will likely have a different project ID. Put yours here so the
+# datastore stuff works
 _PROJECT_ID = 'roommate-tinder'
 _USER_ENTITY = 'roommate_user'
 
 
 class User(object):
-    def __init__(self, username, email, about=''):
+    def __init__(self, username, email, about='', firstname='', lastname='', age='', gender='', bio=''):
         self.username = username
         self.email = email
         self.about = about
+        self.firstname = firstname
+        self.lastname = lastname
+        self.age = age
+        self.gender = gender
+        self.bio = bio
 
     def to_dict(self):
         return {
             'username': self.username,
             'about': self.about,
             'email': self.email,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'age': self.age,
+            'gender': self.gender,
+            'bio': self.bio
         }
 
 
@@ -75,6 +87,19 @@ def load_about_user(username):
         return ''
 
 
+def save_user_profile(username, firstname, lastname, age, gender, bio):
+    """Save the user profile info to the datastore."""
+
+    client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+    user['firstname'] = firstname
+    user['lastname'] = lastname
+    user['age'] = age
+    user['gender'] = gender
+    user['bio'] = bio
+    client.put(user)
+
+
 def save_user(user, passwordhash):
     """Save the user details to the datastore."""
 
@@ -84,6 +109,11 @@ def save_user(user, passwordhash):
     entity['email'] = user.email
     entity['passwordhash'] = passwordhash
     entity['about'] = ''
+    entity['firstname'] = ''
+    entity['lastname'] = ''
+    entity['age'] = ''
+    entity['gender'] = ''
+    entity['bio'] = ''
     # entity['completions'] = []
     client.put(entity)
 
