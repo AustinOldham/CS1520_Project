@@ -90,10 +90,10 @@ def load_about_user(username):
 def save_user_profile(username, firstname, lastname, age, gender, bio):
     """Save the user profile info to the datastore."""
 
-    client = _get_client
+    client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
     user['firstname'] = firstname
-    user['lastname'] = load_about_user
+    user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
     user['bio'] = bio
