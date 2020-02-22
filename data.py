@@ -88,6 +88,15 @@ def load_about_user(username):
         return ''
 
 
+def load_public_user(username):
+    """Returns a user object that contains information that anyone can view."""
+
+    user = _load_entity(_get_client(), _USER_ENTITY, username)
+    if user:
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
+    else:
+        return ''
+
 def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     """Save the user profile info to the datastore."""
 
