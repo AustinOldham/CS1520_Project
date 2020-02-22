@@ -24,8 +24,8 @@ class User(object):
     def to_dict(self):
         return {
             'username': self.username,
-            'about': self.about,
             'email': self.email,
+            'about': self.about,
             'firstname': self.firstname,
             'lastname': self.lastname,
             'age': self.age,
@@ -72,7 +72,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(user['username'], user['email'], user['about'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
     return None
 
 
