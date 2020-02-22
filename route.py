@@ -7,24 +7,24 @@ import data
 
 
 @app.route('/')
-@app.route('/homepage.html')
+@app.route('/index.html')
 def root():
-	return render_template('homepage.html')
+	return render_template('index.html', page_title='Home')
 
 
 @app.route('/signup.html')
 def signup():
-	return render_template('signup.html')
+	return render_template('signup.html', page_title='Sign Up')
 
 
 @app.route('/signin.html')
 def signin():
-	return render_template('signin.html')
+	return render_template('signin.html', page_title='Sign In')
 
 
 @app.route('/editprofile.html')
 def editprofile():
-    return render_template('editprofile.html')
+    return render_template('editprofile.html', page_title='Edit Profile')
 
 
 @app.route('/signin_user', methods=['POST'])
