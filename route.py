@@ -24,7 +24,7 @@ def signin():
 
 @app.route('/editprofile.html')
 def editprofile():
-    return render_template('editprofile.html', page_title='Edit Profile')
+	return render_template('editprofile.html', page_title='Edit Profile')
 
 
 @app.route('/signin_user', methods=['POST'])
@@ -40,9 +40,10 @@ def signin_user():
 		# return show_login_page()
 		return redirect('/signin.html')
 
+
 @app.route('/profile/<username>')
 def profile_page(username):
-	return "Placeholder for {}".format(username)
+	render_template('editprofile.html', page_title=username)
 
 
 @app.route('/register', methods=['POST'])
@@ -70,11 +71,11 @@ def register_user():
 
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
-    firstname = request.form.get('firstname')
-    lastname = request.form.get('lastname')
-    age = request.form.get('age')
-    gender = request.form.get('gender')
-    bio = request.form.get('bio')
-    username = session['user']
-    data.save_user_profile(username, firstname, lastname, age, gender, bio)
-    return redirect('/profile/{}'.format(username))
+	firstname = request.form.get('firstname')
+	lastname = request.form.get('lastname')
+	age = request.form.get('age')
+	gender = request.form.get('gender')
+	bio = request.form.get('bio')
+	username = session['user']
+	data.save_user_profile(username, firstname, lastname, age, gender, bio)
+	return redirect('/profile/{}'.format(username))
