@@ -44,7 +44,7 @@ def signin_user():
 @app.route('/profile/<username>')
 def profile_page(username):
 	user = data.load_public_user(username)
-	return render_template('profile.html', page_title=username, bio_text=user.bio)
+	return render_template('profile.html', page_title=username, name_text=(user.firstname + user.lastname), gender_text=user.gender, age_text=str(user.age), bio_text=user.bio)
 
 
 # TODO: Ensure that the username is unique
