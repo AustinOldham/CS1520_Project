@@ -75,7 +75,8 @@ def update_profile():
 	lastname = request.form.get('lastname')
 	age = request.form.get('age')
 	gender = request.form.get('gender')
+	about = request.form.get('about')
 	bio = request.form.get('bio')
 	username = session['user']
-	data.save_user_profile(username, firstname, lastname, age, gender, bio)
+	data.save_user_profile(username, firstname, lastname, age, gender, about, bio)
 	return redirect('/profile/{}'.format(username))

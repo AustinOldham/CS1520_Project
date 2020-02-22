@@ -76,6 +76,7 @@ def load_user(username, passwordhash):
     return None
 
 
+# Note: This may be removed in the future
 def load_about_user(username):
     """Return a string that represents the "About Me" information a user has
     stored."""
@@ -87,7 +88,7 @@ def load_about_user(username):
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, bio):
+def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -96,6 +97,7 @@ def save_user_profile(username, firstname, lastname, age, gender, bio):
     user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
+    user['about'] = about
     user['bio'] = bio
     client.put(user)
 
