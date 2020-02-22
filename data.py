@@ -11,7 +11,7 @@ _USER_ENTITY = 'roommate_user'
 
 
 class User(object):
-    def __init__(self, username, email, about='', firstname='', lastname='', age='', gender='', bio=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio=''):
         self.username = username
         self.email = email
         self.about = about
