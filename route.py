@@ -43,7 +43,7 @@ def signin_user():
 
 @app.route('/profile/<username>')
 def profile_page(username):
-	render_template('editprofile.html', page_title=username)
+	return render_template('profile.html', page_title=username)
 
 
 @app.route('/register', methods=['POST'])
