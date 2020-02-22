@@ -7,9 +7,9 @@ import data
 
 
 @app.route('/')
-@app.route('/homepage.html')
+@app.route('/index.html')
 def root():
-	return render_template('homepage.html')
+	return render_template('index.html')
 
 
 @app.route('/signup.html')
