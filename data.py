@@ -128,6 +128,20 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
 #    return (liked[2] + liked[1] + liked[0])
 
 
+def like_user(username, other_username):
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
+    liked_list = get_liked_users(username)
+    liked_list.append(other_username)
+    entity['liked_users'] = liked_list
+    client.put(entity)
+
+
+def get_liked_users(username):
+    user = _load_entity(_get_client(), _USER_ENTITY, username)
+    return user['liked_users']
+
+
 def save_new_user(user, passwordhash):
     """Save the user details to the datastore."""
 

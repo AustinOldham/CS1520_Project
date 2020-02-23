@@ -66,7 +66,7 @@ def register_user():
 		pass
 	else:
 		passwordhash = data.get_password_hash(password1)
-		data.save_user(user, passwordhash)
+		data.save_new_user(user, passwordhash)
 		session['user'] = user.username
 		return redirect('/editprofile.html')
 
@@ -86,7 +86,7 @@ def update_profile():
 
 
 # TODO: Remove this later
-@app.route('/testaddlikedusers/<username>')
-def testaddlikedusers(username):
-	data.test_add_liked_users(username)
-	return data.test_return_liked_users(username)
+# @app.route('/testaddlikedusers/<username>')
+# def testaddlikedusers(username):
+# 	data.test_add_liked_users(username)
+# 	return data.test_return_liked_users(username)
