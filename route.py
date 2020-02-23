@@ -41,10 +41,19 @@ def signin_user():
 		return redirect('/signin.html')
 
 
+# TODO: Add check if the current username is in the liked list and pass a variable to the page so a conditional block can correctly choose between a "Like" and an "Unlike" button
 @app.route('/profile/<username>')
 def profile_page(username):
 	user = data.load_public_user(username)
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username)
+	current_user = session['user']
+	is_owner = False  # Checks if the user is looking at his own profile
+	if current_user == user.username:
+		is_owner = True
+	liked_list = data.get_liked_list(current_user)
+	is_liked = False
+	if username in liked_list:
+		is_liked = True
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
 
 
 # TODO: Ensure that the username is unique
