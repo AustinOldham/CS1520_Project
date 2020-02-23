@@ -11,7 +11,7 @@ _USER_ENTITY = 'roommate_user'
 
 
 class User(object):
-    def __init__(self, username, email, about='', firstname='', lastname='', age='', gender='', bio=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio=''):
         self.username = username
         self.email = email
         self.about = about
@@ -24,8 +24,8 @@ class User(object):
     def to_dict(self):
         return {
             'username': self.username,
-            'about': self.about,
             'email': self.email,
+            'about': self.about,
             'firstname': self.firstname,
             'lastname': self.lastname,
             'age': self.age,
@@ -72,10 +72,11 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(user['username'], user['email'], user['about'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
     return None
 
 
+# Note: This may be removed in the future
 def load_about_user(username):
     """Return a string that represents the "About Me" information a user has
     stored."""
@@ -87,7 +88,16 @@ def load_about_user(username):
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, bio):
+def load_public_user(username):
+    """Returns a user object that contains information that anyone can view."""
+
+    user = _load_entity(_get_client(), _USER_ENTITY, username)
+    if user:
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
+    else:
+        return ''
+
+def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -96,6 +106,7 @@ def save_user_profile(username, firstname, lastname, age, gender, bio):
     user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
+    user['about'] = about
     user['bio'] = bio
     client.put(user)
 

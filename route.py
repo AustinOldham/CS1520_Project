@@ -43,9 +43,11 @@ def signin_user():
 
 @app.route('/profile/<username>')
 def profile_page(username):
-	return render_template('profile.html', page_title=username)
+	user = data.load_public_user(username)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio)
 
 
+# TODO: Ensure that the username is unique
 @app.route('/register', methods=['POST'])
 def register_user():
 	username = request.form.get('username')
@@ -69,13 +71,15 @@ def register_user():
 		return redirect('/editprofile.html')
 
 
+# TODO: Redirect to the signup page if the user is not signed in.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
 	firstname = request.form.get('firstname')
 	lastname = request.form.get('lastname')
 	age = request.form.get('age')
 	gender = request.form.get('gender')
+	about = request.form.get('about')
 	bio = request.form.get('bio')
 	username = session['user']
-	data.save_user_profile(username, firstname, lastname, age, gender, bio)
+	data.save_user_profile(username, firstname, lastname, age, gender, about, bio)
 	return redirect('/profile/{}'.format(username))
