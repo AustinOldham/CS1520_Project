@@ -30,12 +30,21 @@
 		</div>
 		<div class="navbar-collapse collapse order-2" id="navbarNavDropdown">
 			<ul class="navbar-nav ml-auto">
+				{% if session['user'] %}
+				<li class="nav-item {% block nav_profile%}{% endblock %}">
+					<a class="nav-link" href="{{ url_for('profile_page', username=session['user']) }}">{{session['user']}}</a>
+				</li>
+				<li class="nav-item {% block nav_signup%}{% endblock %}">
+					<a class="nav-link" href="{{ url_for('logout') }}">Sign Up</a>
+				</li>
+				{% else %}
 				<li class="nav-item {% block nav_signin%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('signin') }}">Login</a>
 				</li>
 				<li class="nav-item {% block nav_signup%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
 				</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>

@@ -40,7 +40,7 @@ def signin_user():
 	user = data.load_user(username, passwordhash)
 	if user:
 		session['user'] = user.username
-		return redirect('/profile/{}'.format(username))
+		return redirect(url_for('profile_page', username=username))
 	else:
 		# return show_login_page()
 		return redirect('/signin.html')
