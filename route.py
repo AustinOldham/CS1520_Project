@@ -83,3 +83,10 @@ def update_profile():
 	username = session['user']
 	data.save_user_profile(username, firstname, lastname, age, gender, about, bio)
 	return redirect('/profile/{}'.format(username))
+
+
+# TODO: Remove this later
+@app.route('/testaddlikedusers/<username>')
+def testaddlikedusers(username):
+	data.test_add_liked_users(username)
+	return data.test_return_liked_users(username)
