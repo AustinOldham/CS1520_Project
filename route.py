@@ -132,7 +132,7 @@ def find_match():
 	if other_username:
 		return redirect(url_for('profile_page', username=other_username))
 	else:
-		return redirect(url_for('error', error_type="match_not_found"))
+		return redirect(url_for('error_page', error_type="match_not_found"))
 
 
 @app.route('/error')
