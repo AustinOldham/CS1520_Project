@@ -44,7 +44,7 @@ def signin_user():
 @app.route('/profile/<username>')
 def profile_page(username):
 	user = data.load_public_user(username)
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username)
 
 
 # TODO: Ensure that the username is unique
@@ -92,6 +92,8 @@ def update_profile():
 # 	data.test_add_liked_users(username)
 # 	return data.test_return_liked_users(username)
 
+
+# TODO: Remove the like/unlike button from the user's own profile
 @app.route('/likeuser/<other_username>')
 def like_user(other_username):
 	username = session['user']
