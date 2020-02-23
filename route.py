@@ -104,14 +104,6 @@ def update_profile():
 	return redirect(url_for('profile_page', username=username))
 
 
-# TODO: Remove this later
-# @app.route('/testaddlikedusers/<username>')
-# def testaddlikedusers(username):
-# 	data.test_add_liked_users(username)
-# 	return data.test_return_liked_users(username)
-
-
-# TODO: Remove the like/unlike button from the user's own profile
 @app.route('/likeuser/<other_username>')
 def like_user(other_username):
 	username = session['user']
