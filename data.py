@@ -157,8 +157,11 @@ def make_match(username):
     q = client.query(kind=_USER_ENTITY)
     liked_list = get_liked_users(username)
     results = list(q.fetch())
+    # results = list(q.fetch(100))  # Adds a limit to the maximum number of results
     print(results)
     for user in results:
+        print("RESULT (d): " + user['username'])
+        print("RESULT (o): " + user.username)
         if (user['username'] != username and user['username'] not in liked_list):
             return user['username']
     return ''
