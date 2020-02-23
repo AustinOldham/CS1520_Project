@@ -5,6 +5,11 @@ import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
+# Dictionary that contains the messages that will be displayed on error.html.
+error_codes = {
+	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
+}
+
 
 @app.route('/')
 @app.route('/index.html')
@@ -119,4 +124,10 @@ def unlike_user(other_username):
 @app.route('/findmatch')
 def find_match():
 	other_username = data.make_match(session['user'])
-	return redirect('/profile/{}'.format(other_username))
+	return redirect('/profile/{}'.format(other_username))  # TODO: There may be a better way to do a redirect.
+
+
+@app.route('/error')
+def error_page():
+	value = request.args['error_type']
+	return render_template('error.html', page_title="Error", error_message=error_codes[value])
