@@ -1,4 +1,8 @@
 {% extends '_base.html' %}
+{% block head %}
+	{{ super() }}
+	<script type="text/javascript" src="/static/js/like_unlike.js" async></script>
+{% endblock %}
 {% block nav_profile %}active{% endblock %}
 {% block content %}
 <div class="container bg-light rounded" style="word-wrap: break-word;">
