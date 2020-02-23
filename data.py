@@ -11,7 +11,7 @@ _USER_ENTITY = 'roommate_user'
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=[]):
         self.username = username
         self.email = email
         self.about = about
@@ -20,6 +20,7 @@ class User(object):
         self.age = age
         self.gender = gender
         self.bio = bio
+        self.liked_users = liked_users
 
     def to_dict(self):
         return {
@@ -30,7 +31,8 @@ class User(object):
             'lastname': self.lastname,
             'age': self.age,
             'gender': self.gender,
-            'bio': self.bio
+            'bio': self.bio,
+            'liked_users': self.liked_users
         }
 
 
@@ -97,6 +99,7 @@ def load_public_user(username):
     else:
         return ''
 
+
 def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     """Save the user profile info to the datastore."""
 
@@ -111,7 +114,56 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     client.put(user)
 
 
-def save_user(user, passwordhash):
+#def test_add_liked_users(username):
+#    client = _get_client()
+#    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
+#    entity['liked_users'] = ["test1", "test2", "test3"]
+#    client.put(entity)
+
+
+#def test_return_liked_users(username):
+#    user = _load_entity(_get_client(), _USER_ENTITY, username)
+#    liked = user['liked_users']
+#    return (liked[2] + liked[1] + liked[0])
+
+
+def like_user(username, other_username):
+    client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+    liked_list = get_liked_users(username)
+    liked_list.append(other_username)
+    user['liked_users'] = liked_list
+    client.put(user)
+
+
+def unlike_user(username, other_username):
+    client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+    liked_list = get_liked_users(username)
+    liked_list.remove(other_username)
+    user['liked_users'] = liked_list
+    client.put(user)
+
+
+def get_liked_users(username):
+    user = _load_entity(_get_client(), _USER_ENTITY, username)
+    return user['liked_users']
+
+
+# TODO: Make the liked users list a hashtable in order to speed up the search.
+def make_match(username):
+    """Matches with a random user"""
+    client = _get_client()
+    q = client.query(kind=_USER_ENTITY)
+    liked_list = get_liked_users(username)
+    results = list(q.fetch(100))  # Adds a limit to the maximum number of results
+    for user in results:
+        if (user['username'] != username and user['username'] not in liked_list):
+            return user['username']
+    return ''
+
+
+def save_new_user(user, passwordhash):
     """Save the user details to the datastore."""
 
     client = _get_client()
@@ -125,7 +177,7 @@ def save_user(user, passwordhash):
     entity['age'] = ''
     entity['gender'] = ''
     entity['bio'] = ''
-    # entity['completions'] = []
+    entity['liked_users'] = []
     client.put(entity)
 
 

@@ -44,7 +44,15 @@ def signin_user():
 @app.route('/profile/<username>')
 def profile_page(username):
 	user = data.load_public_user(username)
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio)
+	current_user = session['user']
+	is_owner = False  # Checks if the user is looking at his own profile
+	if current_user == user.username:
+		is_owner = True
+	liked_list = data.get_liked_users(current_user)
+	is_liked = False
+	if username in liked_list:
+		is_liked = True
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
 
 
 # TODO: Ensure that the username is unique
@@ -66,12 +74,13 @@ def register_user():
 		pass
 	else:
 		passwordhash = data.get_password_hash(password1)
-		data.save_user(user, passwordhash)
+		data.save_new_user(user, passwordhash)
 		session['user'] = user.username
 		return redirect('/editprofile.html')
 
 
 # TODO: Redirect to the signup page if the user is not signed in.
+# TODO: Fill in each text area with what the user already has so the information is not wiped each time.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
 	firstname = request.form.get('firstname')
@@ -81,5 +90,33 @@ def update_profile():
 	about = request.form.get('about')
 	bio = request.form.get('bio')
 	username = session['user']
-	data.save_user_profile(username, firstname, lastname, age, gender, about, bio)
+	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
 	return redirect('/profile/{}'.format(username))
+
+
+# TODO: Remove this later
+# @app.route('/testaddlikedusers/<username>')
+# def testaddlikedusers(username):
+# 	data.test_add_liked_users(username)
+# 	return data.test_return_liked_users(username)
+
+
+# TODO: Remove the like/unlike button from the user's own profile
+@app.route('/likeuser/<other_username>')
+def like_user(other_username):
+	username = session['user']
+	data.like_user(username, other_username)
+	return "success", 200
+
+
+@app.route('/unlikeuser/<other_username>')
+def unlike_user(other_username):
+	username = session['user']
+	data.unlike_user(username, other_username)
+	return "success", 200
+
+
+@app.route('/findmatch')
+def find_match():
+	other_username = data.make_match(session['user'])
+	return redirect('/profile/{}'.format(other_username))
