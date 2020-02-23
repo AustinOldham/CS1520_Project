@@ -114,3 +114,9 @@ def unlike_user(other_username):
 	username = session['user']
 	data.unlike_user(username, other_username)
 	return "success", 200
+
+
+@app.route('/findmatch')
+def find_match():
+	other_username = data.make_match(session['user'])
+	return redirect('/profile/{}'.format(other_username))

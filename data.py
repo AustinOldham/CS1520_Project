@@ -150,6 +150,20 @@ def get_liked_users(username):
     return user['liked_users']
 
 
+# TODO: Make the liked users list a hashtable in order to speed up the search.
+def make_match(username):
+    """Matches with a random user"""
+    client = _get_client()
+    q = client.query(kind=_USER_ENTITY)
+    liked_list = get_liked_users(username)
+    results = list(q.fetch())
+    print(results)
+    for user in results:
+        if (user['username'] != username and user['username'] not in liked_list):
+            return user['username']
+    return ''
+
+
 def save_new_user(user, passwordhash):
     """Save the user details to the datastore."""
 
