@@ -101,6 +101,7 @@ def load_public_user(username):
     else:
         return ''
 
+
 def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     """Save the user profile info to the datastore."""
 

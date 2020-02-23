@@ -72,6 +72,7 @@ def register_user():
 
 
 # TODO: Redirect to the signup page if the user is not signed in.
+# TODO: Fill in each text area with what the user already has so the information is not wiped each time.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
 	firstname = request.form.get('firstname')
@@ -81,7 +82,7 @@ def update_profile():
 	about = request.form.get('about')
 	bio = request.form.get('bio')
 	username = session['user']
-	data.save_user_profile(username, firstname, lastname, age, gender, about, bio)
+	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
 	return redirect('/profile/{}'.format(username))
 
 
@@ -90,3 +91,8 @@ def update_profile():
 # def testaddlikedusers(username):
 # 	data.test_add_liked_users(username)
 # 	return data.test_return_liked_users(username)
+
+@app.route('/likeuser/<other_username>')
+def like_user(other_username):
+	username = session['user']
+	data.like_user(username, other_username)
