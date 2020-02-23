@@ -101,7 +101,7 @@ def update_profile():
 	bio = request.form.get('bio')
 	username = session['user']
 	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
-	return redirect(url_for('profile', username=username))
+	return redirect(url_for('profile_page', username=username))
 
 
 # TODO: Remove this later
@@ -130,7 +130,7 @@ def unlike_user(other_username):
 def find_match():
 	other_username = data.make_match(session['user'])
 	if other_username:
-		return redirect(url_for('profile', username=other_username))
+		return redirect(url_for('profile_page', username=other_username))
 	else:
 		return redirect(url_for('error', error_type="match_not_found"))
 
