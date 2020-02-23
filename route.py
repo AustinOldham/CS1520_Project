@@ -60,6 +60,11 @@ def profile_page(username):
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
 
 
+@app.route('/profile')
+def profile_list():
+	return render_template('profilelist.html', page_title="Profile List")
+
+
 # TODO: Ensure that the username is unique
 @app.route('/register', methods=['POST'])
 def register_user():
