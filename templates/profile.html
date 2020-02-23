@@ -29,12 +29,14 @@
 		<div class="col-sm"><br><h3>Bio:</h3>{{bio_text}}</div>
 	</div>
 	<div class="row">
+		<div class="col-sm">
 		{% if is_owner %}
 		{% elif is_liked %}
 			<button id="like_unlike_button" onclick="unlike_js('{{other_username}}')" class="btn btn-warning">Unlike</button>
 		{% else %}
 			<button id="like_unlike_button" onclick="like_js('{{other_username}}')" class="btn btn-primary">Like</button>
 		{% endif %}
+		</div>
 	</div>
 </div>
 {% endblock %}
