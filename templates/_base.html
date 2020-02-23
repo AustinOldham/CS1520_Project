@@ -35,7 +35,7 @@
 					<a class="nav-link" href="{{ url_for('profile_page', username=session['user']) }}">{{session['user']}}</a>
 				</li>
 				<li class="nav-item {% block nav_signup%}{% endblock %}">
-					<a class="nav-link" href="{{ url_for('logout') }}">Sign Up</a>
+					<a class="nav-link" href="{{ url_for('logout_user') }}">Logout</a>
 				</li>
 				{% else %}
 				<li class="nav-item {% block nav_signin%}{% endblock %}">

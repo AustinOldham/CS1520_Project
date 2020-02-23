@@ -46,6 +46,12 @@ def signin_user():
 		return redirect('/signin.html')
 
 
+@app.route('/logout')
+def logout_user():
+	session.pop('user', None)
+	return redirect(url_for('root'))
+
+
 @app.route('/profile/<username>')
 def profile_page(username):
 	user = data.load_public_user(username)
