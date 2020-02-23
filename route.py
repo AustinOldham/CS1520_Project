@@ -98,9 +98,11 @@ def update_profile():
 def like_user(other_username):
 	username = session['user']
 	data.like_user(username, other_username)
+	return "success", 200
 
 
 @app.route('/unlikeuser/<other_username>')
 def unlike_user(other_username):
 	username = session['user']
 	data.unlike_user(username, other_username)
+	return "success", 200
