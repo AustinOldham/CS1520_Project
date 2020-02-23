@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
 import data
@@ -96,7 +96,7 @@ def update_profile():
 	bio = request.form.get('bio')
 	username = session['user']
 	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
-	return redirect('/profile/{}'.format(username))
+	return redirect(url_for('profile', username=username))
 
 
 # TODO: Remove this later
@@ -124,7 +124,10 @@ def unlike_user(other_username):
 @app.route('/findmatch')
 def find_match():
 	other_username = data.make_match(session['user'])
-	return redirect('/profile/{}'.format(other_username))  # TODO: There may be a better way to do a redirect.
+	if other_username:
+		return redirect(url_for('profile', username=other_username))
+	else:
+		return redirect(url_for('error', error_type="match_not_found"))
 
 
 @app.route('/error')
