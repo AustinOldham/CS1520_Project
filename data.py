@@ -65,8 +65,6 @@ def _load_entity(client, entity_type, entity_id, parent_key=None):
     return entity
 
 
-
-
 def load_user(username, passwordhash):
     """Load a user based on the passwordhash; if the passwordhash doesn't match
     the username, then this should return None."""
@@ -131,20 +129,20 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
 
 def like_user(username, other_username):
     client = _get_client()
-    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
+    user = _load_entity(client, _USER_ENTITY, username)
     liked_list = get_liked_users(username)
     liked_list.append(other_username)
-    entity['liked_users'] = liked_list
-    client.put(entity)
+    user['liked_users'] = liked_list
+    client.put(user)
 
 
 def unlike_user(username, other_username):
     client = _get_client()
-    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
+    user = _load_entity(client, _USER_ENTITY, username)
     liked_list = get_liked_users(username)
     liked_list.remove(other_username)
-    entity['liked_users'] = liked_list
-    client.put(entity)
+    user['liked_users'] = liked_list
+    client.put(user)
 
 
 def get_liked_users(username):
