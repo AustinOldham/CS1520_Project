@@ -138,6 +138,15 @@ def like_user(username, other_username):
     client.put(entity)
 
 
+def unlike_user(username, other_username):
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
+    liked_list = get_liked_users(username)
+    liked_list.remove(other_username)
+    entity['liked_users'] = liked_list
+    client.put(entity)
+
+
 def get_liked_users(username):
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     return user['liked_users']
