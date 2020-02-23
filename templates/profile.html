@@ -1,16 +1,24 @@
 {% extends '_base.html' %}
 {% block nav_profile %}active{% endblock %}
 {% block content %}
-<div class="container bg-light" style="word-wrap: break-word;">
+<div class="container bg-light rounded" style="word-wrap: break-word;">
 	<div class="row">
-		<div class="col-sm-4"><img src="/static/images/placeholder_profile.png" class="img-fluid" alt="Profile picture"></div>
-		<div class="col-sm-8">
-	        <div class="row">
-                <div class="col-sm-12">Name: </div>
-                <div class="col-sm-12">Gender: </div>
-                <div class="col-sm-12">Age: </div>
-                <div class="col-sm-12">About: </div>
-            </div>	    
+		<div class="col-sm-4 mt-3"><img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" alt="Profile picture"></div>
+		<div class="col-sm-8 mt-3">
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="font-weight-bold">Name: </p>
+				</div>
+				<div class="col-sm-12">
+					<p class="font-weight-bold">Gender: </p>
+				</div>
+				<div class="col-sm-12">
+					<p class="font-weight-bold">Age: </p>
+				</div>
+				<div class="col-sm-12">
+					<p class="font-weight-bold">About: </p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row">
