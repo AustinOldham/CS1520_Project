@@ -1,12 +1,26 @@
 {% extends '_base.html' %}
 {% block nav_matchlist %}active{% endblock %}
 {% block content %}
-<ol> 
-    <!-- For loop logic of jinja template -->
-    {%for i in range(0, num_users)%}
-      
-        <li>{{matches[i]}}</li> 
-    {%endfor%} 
-      
-</ol>
+<!-- Page index is used to support having multiple pages -->
+<div class="container" style="word-wrap: break-word;">
+	<!-- For loop logic of jinja template -->
+	{%for i in range(0, num_users)%}
+	<div class="row bg-light rounded">
+		<div class="col-sm-1">
+			<p class="font-weight-bold">{{i + page_index}}</p>
+		</div>
+		<div class="col-sm-5 mt-3">
+			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" alt="Profile picture">
+		</div>
+		<div class="col-sm-2">
+			<a href="#" class="nav-link text-body">{{matches[i]}}</p>
+		</div>
+		<div class="col-sm-2">
+			<p>Waiting for a response</p>
+		</div>
+		<div class="col-sm-2">
+			<a href="#" class="btn btn-primary disabled" role="button">Message</a>
+		</div>
+	</div>
+	{%endfor%} 
 {% endblock %}
