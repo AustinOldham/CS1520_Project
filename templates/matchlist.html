@@ -7,7 +7,7 @@
 	{%for i in range(0, num_users)%}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
-			<p class="font-weight-bold">{{i + page_index}}</p>
+			<p class="font-weight-bold ml-3">{{i + page_index}}</p>
 		</div>
 		<div class="col-sm-5 mt-3">
 			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" alt="Profile picture">
@@ -19,7 +19,7 @@
 			<p>Waiting for a response</p>
 		</div>
 		<div class="col-sm-2 mt-3">
-			<a href="#" class="btn btn-primary disabled" role="button">Message</a>
+			<a href="#" class="btn btn-primary disabled float-right mr-3" role="button">Message</a>
 		</div>
 	</div>
 	{%endfor%} 
