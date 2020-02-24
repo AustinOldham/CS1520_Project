@@ -1,9 +1,14 @@
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
 import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
+
+# Dictionary that contains the messages that will be displayed on error.html.
+error_codes = {
+	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
+}
 
 
 @app.route('/')
@@ -35,10 +40,16 @@ def signin_user():
 	user = data.load_user(username, passwordhash)
 	if user:
 		session['user'] = user.username
-		return redirect('/profile/{}'.format(username))
+		return redirect(url_for('profile_page', username=username))
 	else:
 		# return show_login_page()
 		return redirect('/signin.html')
+
+
+@app.route('/logout')
+def logout_user():
+	session.pop('user', None)
+	return redirect(url_for('root'))
 
 
 @app.route('/profile/<username>')
@@ -53,6 +64,11 @@ def profile_page(username):
 	if username in liked_list:
 		is_liked = True
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
+
+
+@app.route('/profile')
+def profile_list():
+	return render_template('profilelist.html', page_title="Profile List")
 
 
 # TODO: Ensure that the username is unique
@@ -91,17 +107,9 @@ def update_profile():
 	bio = request.form.get('bio')
 	username = session['user']
 	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
-	return redirect('/profile/{}'.format(username))
+	return redirect(url_for('profile_page', username=username))
 
 
-# TODO: Remove this later
-# @app.route('/testaddlikedusers/<username>')
-# def testaddlikedusers(username):
-# 	data.test_add_liked_users(username)
-# 	return data.test_return_liked_users(username)
-
-
-# TODO: Remove the like/unlike button from the user's own profile
 @app.route('/likeuser/<other_username>')
 def like_user(other_username):
 	username = session['user']
@@ -119,4 +127,13 @@ def unlike_user(other_username):
 @app.route('/findmatch')
 def find_match():
 	other_username = data.make_match(session['user'])
-	return redirect('/profile/{}'.format(other_username))
+	if other_username:
+		return redirect(url_for('profile_page', username=other_username))
+	else:
+		return redirect(url_for('error_page', error_type="match_not_found"))
+
+
+@app.route('/error')
+def error_page():
+	value = request.args['error_type']
+	return render_template('error.html', page_title="Error", error_message=error_codes[value])

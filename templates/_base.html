@@ -23,29 +23,28 @@
 				<li class="nav-item {% block nav_match%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('find_match') }}">Find a Match</a>
 				</li>
-				<li class="nav-item {% block nav_pricing%}{% endblock %}">
-					<a class="nav-link" href="{{ url_for('root') }}">Pricing</a>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Dropdown link
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="#">Action</a>
-						<a class="dropdown-item" href="#">Another action</a>
-						<a class="dropdown-item" href="#">Something else here</a>
-					</div>
+				<li class="nav-item {% block nav_profilelistg%}{% endblock %}">
+					<a class="nav-link" href="{{ url_for('profile_list') }}">Browse</a>
 				</li>
 			</ul>
 		</div>
 		<div class="navbar-collapse collapse order-2" id="navbarNavDropdown">
 			<ul class="navbar-nav ml-auto">
+				{% if session['user'] %}
+				<li class="nav-item {% block nav_profile%}{% endblock %}">
+					<a class="nav-link" href="{{ url_for('profile_page', username=session['user']) }}">{{session['user']}}</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('logout_user') }}">Logout</a>
+				</li>
+				{% else %}
 				<li class="nav-item {% block nav_signin%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('signin') }}">Login</a>
 				</li>
 				<li class="nav-item {% block nav_signup%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
 				</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
