@@ -132,6 +132,9 @@ def find_match():
 	else:
 		return redirect(url_for('error_page', error_type="match_not_found"))
 
+@app.route('/matches')
+def match_list():
+	return render_template('chatlist.html', page_title="My Matches")
 
 @app.route('/error')
 def error_page():
