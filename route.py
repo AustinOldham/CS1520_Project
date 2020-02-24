@@ -134,7 +134,9 @@ def find_match():
 
 @app.route('/matches')
 def match_list():
-	return render_template('matchlist.html', page_title="My Matches")
+	username = session['user']
+	liked_users = data.get_liked_users(username)
+	return render_template('matchlist.html', page_title="My Matches", matches=liked_users, num_users=len(liked_users))
 
 @app.route('/error')
 def error_page():

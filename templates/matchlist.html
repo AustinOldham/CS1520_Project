@@ -1,5 +1,12 @@
 {% extends '_base.html' %}
 {% block nav_matchlist %}active{% endblock %}
 {% block content %}
-<h2>This is a match placeholder</h2>
+<ol> 
+    <!-- For loop logic of jinja template -->
+    {%for i in range(0, num_users)%}
+      
+        <li>{{matches[i]}}</li> 
+    {%endfor%} 
+      
+</ol>
 {% endblock %}
