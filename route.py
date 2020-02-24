@@ -134,7 +134,7 @@ def find_match():
 
 @app.route('/matches')
 def match_list():
-	return render_template('chatlist.html', page_title="My Matches")
+	return render_template('matchlist.html', page_title="My Matches")
 
 @app.route('/error')
 def error_page():
