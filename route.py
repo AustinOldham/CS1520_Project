@@ -72,7 +72,7 @@ def profile_list():
 
 
 # TODO: Ensure that the username is unique
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET'])
 def register_user():
 	username = request.form.get('username')
 	password1 = request.form.get('password1')
