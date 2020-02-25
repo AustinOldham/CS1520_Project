@@ -132,11 +132,13 @@ def find_match():
 	else:
 		return redirect(url_for('error_page', error_type="match_not_found"))
 
+
 @app.route('/matches')
 def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
 	return render_template('matchlist.html', page_title="My Matches", matches=liked_users, num_users=len(liked_users), page_index=0)
+
 
 @app.route('/error')
 def error_page():

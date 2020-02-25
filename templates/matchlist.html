@@ -4,7 +4,7 @@
 <!-- Page index is used to support having multiple pages -->
 <div class="container" style="word-wrap: break-word;">
 	<!-- For loop logic of jinja template -->
-	{%for i in range(0, num_users)%}
+	{%for i, key in enumerate(matches) %}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
 			<p class="font-weight-bold ml-3">{{i + 1 + page_index}}</p>
@@ -13,7 +13,7 @@
 			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 		</div>
 		<div class="col-sm-3 mt-3">
-			<a href="{{ url_for('profile_page', username=matches[i]) }}" class="text-body">{{matches[i]}}</a>
+			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{key}}</a>
 		</div>
 		<div class="col-sm-5 mt-3">
 			<p>Waiting for a response</p>
