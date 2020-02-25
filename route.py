@@ -59,9 +59,9 @@ def profile_page(username):
 	is_owner = False  # Checks if the user is looking at his own profile
 	if current_user == user.username:
 		is_owner = True
-	liked_list = data.get_liked_users(current_user)
+	liked_dict = data.get_liked_users(current_user)
 	is_liked = False
-	if username in liked_list:
+	if username in liked_dict:
 		is_liked = True
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
 
@@ -132,11 +132,13 @@ def find_match():
 	else:
 		return redirect(url_for('error_page', error_type="match_not_found"))
 
+
 @app.route('/matches')
 def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
-	return render_template('matchlist.html', page_title="My Matches", matches=liked_users, num_users=len(liked_users))
+	return render_template('matchlist.html', page_title="My Matches", matches=liked_users, num_users=len(liked_users), page_index=0)
+
 
 @app.route('/error')
 def error_page():

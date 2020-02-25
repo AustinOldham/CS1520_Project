@@ -1,17 +1,22 @@
 from google.cloud import datastore
+from datetime import datetime, timezone, timedelta
 
 import hashlib
+import json
+
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
 # Everyone will likely have a different project ID. Put yours here so the
 # datastore stuff works
-_PROJECT_ID = 'testproject-266723'
+_PROJECT_ID = 'roommate-tinder'
 _USER_ENTITY = 'roommate_user'
+
+MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=[]):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=''):
         self.username = username
         self.email = email
         self.about = about
@@ -74,7 +79,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'], liked_users=user['liked_users'])
     return None
 
 
@@ -126,39 +131,49 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
 #    liked = user['liked_users']
 #    return (liked[2] + liked[1] + liked[0])
 
+def is_like_expired(old_date_string):
+    """Checks how long ago the like was made"""
+    old_date = datetime.strptime(old_date_string, "%Y-%m-%d %H:%M:%S")
+    current_date = datetime.now(timezone.utc)
+    difference = current_date - old_date
+    return difference > MAX_LIKED_TIME
+
 
 def like_user(username, other_username):
-    client = _get_client()
-    user = _load_entity(client, _USER_ENTITY, username)
-    liked_list = get_liked_users(username)
-    liked_list.append(other_username)
-    user['liked_users'] = liked_list
-    client.put(user)
+    current_time = datetime.now(timezone.utc)  # Uses UTC for consistency.
+    liked_dict = get_liked_users(username)
+    liked_dict[other_username] = current_time.isoformat(' ', 'seconds')  # Stores the time that the like was performed in order to allow the program to remove old entries.
+    save_liked_users(liked_dict, username)
 
 
 def unlike_user(username, other_username):
+    liked_dict = get_liked_users(username)
+    del liked_dict[other_username]
+    save_liked_users(liked_dict, username)
+
+
+# If the json conversion is too slow, use ujson
+def get_liked_users(username):
+    user = _load_entity(_get_client(), _USER_ENTITY, username)
+    liked_dict = json.loads(user['liked_users'] or '{}')  # Converts the json string to a dictionary.
+    return liked_dict
+
+
+def save_liked_users(liked_dict, username):
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
-    liked_list = get_liked_users(username)
-    liked_list.remove(other_username)
-    user['liked_users'] = liked_list
+    user['liked_users'] = json.dumps(liked_dict)  # Converts the dictionary to a string since Datastore does not support dictionaries.
     client.put(user)
 
 
-def get_liked_users(username):
-    user = _load_entity(_get_client(), _USER_ENTITY, username)
-    return user['liked_users']
-
-
-# TODO: Make the liked users list a hashtable in order to speed up the search.
 def make_match(username):
     """Matches with a random user"""
     client = _get_client()
     q = client.query(kind=_USER_ENTITY)
-    liked_list = get_liked_users(username)
+    liked_dict = get_liked_users(username)
     results = list(q.fetch(100))  # Adds a limit to the maximum number of results
     for user in results:
-        if (user['username'] != username and user['username'] not in liked_list):
+        if (user['username'] not in liked_dict and user['username'] != username):
             return user['username']
     return ''
 
@@ -177,7 +192,7 @@ def save_new_user(user, passwordhash):
     entity['age'] = ''
     entity['gender'] = ''
     entity['bio'] = ''
-    entity['liked_users'] = []
+    entity['liked_users'] = ''
     client.put(entity)
 
 
