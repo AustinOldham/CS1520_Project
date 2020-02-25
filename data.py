@@ -2,6 +2,7 @@ from google.cloud import datastore
 from datetime import datetime, timezone, timedelta
 
 import hashlib
+import json
 
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -15,7 +16,7 @@ MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users={}):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=''):
         self.username = username
         self.email = email
         self.about = about
@@ -139,27 +140,30 @@ def is_like_expired(old_date_string):
 
 
 def like_user(username, other_username):
-    client = _get_client()
-    user = _load_entity(client, _USER_ENTITY, username)
     current_time = datetime.now(timezone.utc)  # Uses UTC for consistency.
     liked_dict = get_liked_users(username)
     liked_dict[other_username] = current_time.replace(microsecond=0)  # Stores the time that the like was performed in order to allow the program to remove old entries.
-    user['liked_users'] = liked_dict
-    client.put(user)
+    save_liked_users(liked_dict, username)
 
 
 def unlike_user(username, other_username):
-    client = _get_client()
-    user = _load_entity(client, _USER_ENTITY, username)
     liked_dict = get_liked_users(username)
     del liked_dict[other_username]
-    user['liked_users'] = liked_dict
-    client.put(user)
+    save_liked_users(liked_dict, username)
 
 
+# If the json conversion is too slow, use ujson
 def get_liked_users(username):
     user = _load_entity(_get_client(), _USER_ENTITY, username)
-    return user['liked_users']
+    liked_dict = json.loads(user['liked_users'])  # Converts the json string to a dictionary.
+    return liked_dict
+
+
+def save_liked_users(liked_dict, username):
+    client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+    user['liked_users'] = json.dumps(liked_dict)  # Converts the dictionary to a string since Datastore does not support dictionaries.
+    client.put(user)
 
 
 def make_match(username):
@@ -188,7 +192,7 @@ def save_new_user(user, passwordhash):
     entity['age'] = ''
     entity['gender'] = ''
     entity['bio'] = ''
-    entity['liked_users'] = {}
+    entity['liked_users'] = ''
     client.put(entity)
 
 
