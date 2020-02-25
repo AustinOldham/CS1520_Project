@@ -13,7 +13,7 @@
 			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 		</div>
 		<div class="col-sm-3 mt-3">
-			<a href="#" class="text-body">{{matches[i]}}</a>
+			<a href="{{ url_for('profile_page', username=matches[i]) }}" class="text-body">{{matches[i]}}</a>
 		</div>
 		<div class="col-sm-5 mt-3">
 			<p>Waiting for a response</p>
