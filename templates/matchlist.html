@@ -4,16 +4,17 @@
 <!-- Page index is used to support having multiple pages -->
 <div class="container" style="word-wrap: break-word;">
 	<!-- For loop logic of jinja template -->
-	{%for i, key in enumerate(matches) %}
+	<!-- If a 0-indexed loop is required, use loop.index0 instead  -->
+	{% for key in matches.items() %}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
-			<p class="font-weight-bold ml-3">{{i + 1 + page_index}}</p>
+			<p class="font-weight-bold ml-3">{{ loop.index + page_index }}</p>
 		</div>
 		<div class="col-sm-1 my-1">
 			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 		</div>
 		<div class="col-sm-3 mt-3">
-			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{key}}</a>
+			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{ key }}</a>
 		</div>
 		<div class="col-sm-5 mt-3">
 			<p>Waiting for a response</p>
@@ -22,6 +23,6 @@
 			<a href="#" class="btn btn-primary disabled float-right mr-3" role="button">Message</a>
 		</div>
 	</div>
-	{%endfor%} 
+	{% endfor %} 
 </div>
 {% endblock %}
