@@ -142,7 +142,7 @@ def is_like_expired(old_date_string):
 def like_user(username, other_username):
     current_time = datetime.now(timezone.utc)  # Uses UTC for consistency.
     liked_dict = get_liked_users(username)
-    liked_dict[other_username] = current_time.replace(microsecond=0)  # Stores the time that the like was performed in order to allow the program to remove old entries.
+    liked_dict[other_username] = current_time.isoformat(' ', 'seconds')  # Stores the time that the like was performed in order to allow the program to remove old entries.
     save_liked_users(liked_dict, username)
 
 
