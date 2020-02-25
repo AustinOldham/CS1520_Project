@@ -155,7 +155,7 @@ def unlike_user(username, other_username):
 # If the json conversion is too slow, use ujson
 def get_liked_users(username):
     user = _load_entity(_get_client(), _USER_ENTITY, username)
-    liked_dict = json.loads(user['liked_users'])  # Converts the json string to a dictionary.
+    liked_dict = json.loads(user['liked_users'] or '{}')  # Converts the json string to a dictionary.
     return liked_dict
 
 
