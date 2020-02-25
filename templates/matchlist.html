@@ -7,7 +7,7 @@
 	{%for i in range(0, num_users)%}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
-			<p class="font-weight-bold ml-3">1</p>
+			<p class="font-weight-bold ml-3">{{i + 1 + page_index}}</p>
 		</div>
 		<div class="col-sm-1 my-1">
 			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
