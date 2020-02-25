@@ -162,15 +162,14 @@ def get_liked_users(username):
     return user['liked_users']
 
 
-# TODO: Make the liked users list a hashtable in order to speed up the search.
 def make_match(username):
     """Matches with a random user"""
     client = _get_client()
     q = client.query(kind=_USER_ENTITY)
-    liked_list = get_liked_users(username)
+    liked_dict = get_liked_users(username)
     results = list(q.fetch(100))  # Adds a limit to the maximum number of results
     for user in results:
-        if (user['username'] != username and user['username'] not in liked_list):
+        if (user['username'] not in liked_dict and user['username'] != username):
             return user['username']
     return ''
 
