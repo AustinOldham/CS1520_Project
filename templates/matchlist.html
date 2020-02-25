@@ -5,7 +5,7 @@
 <div class="container" style="word-wrap: break-word;">
 	<!-- For loop logic of jinja template -->
 	<!-- If a 0-indexed loop is required, use loop.index0 instead  -->
-	{% for key in matches.items() %}
+	{% for key, value in matches.items() %}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
 			<p class="font-weight-bold ml-3">{{ loop.index + page_index }}</p>
