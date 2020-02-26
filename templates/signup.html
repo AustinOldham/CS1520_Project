@@ -51,6 +51,15 @@
       form.password1.focus();
       return false;
     }
+    if(form.email.value == "") {
+        alert("Error: Please enter an email address");
+        return false;
+    }
+    re = /\S+@\S+\.\S+/;
+    if(!re.test(form.email.value)) {
+        alert("Error: Please enter a valid email address");
+        return false;
+    }
     if(!form.terms.checked) {
         alert("Please accept the terms and conditions to proceed");
         return false;
