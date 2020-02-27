@@ -1,6 +1,7 @@
 from flask import render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
+#from flask_socketio import SocketIO
 import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -10,12 +11,12 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
+#socketio = SocketIO(app)
 
 @app.route('/')
 @app.route('/index.html')
 def root():
 	return render_template('index.html', page_title='Home')
-
 
 @app.route('/signup.html')
 def signup():
@@ -137,7 +138,14 @@ def find_match():
 def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
-	return render_template('matchlist.html', page_title="My Matches", matches=liked_users, num_users=len(liked_users), page_index=0)
+	matched_usernames = []
+	waiting_usernames = []
+	for user in liked_users.keys():
+		if username in data.get_liked_users(user).keys():
+			matched_usernames.append(user)
+		else:
+			waiting_usernames.append(user)
+	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
 
 @app.route('/error')

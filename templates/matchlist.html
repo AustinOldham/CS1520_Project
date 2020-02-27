@@ -5,7 +5,7 @@
 <div class="container" style="word-wrap: break-word;">
 	<!-- For loop logic of jinja template -->
 	<!-- If a 0-indexed loop is required, use loop.index0 instead  -->
-	{% for key, value in matches.items() %}
+	{% for key in matches %}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-1 mt-3">
 			<p class="font-weight-bold ml-3">{{ loop.index + page_index }}</p>
@@ -17,12 +17,28 @@
 			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{ key }}</a>
 		</div>
 		<div class="col-sm-5 mt-3">
-			<p>Waiting for a response</p>
+			<p>Match! Send them a message to start chatting</p>
 		</div>
 		<div class="col-sm-2 mt-2">
 			<a href="#" class="btn btn-primary disabled float-right mr-3" role="button">Message</a>
 		</div>
 	</div>
 	{% endfor %} 
+	{% for key in waiting %}
+	<div class="row bg-light rounded mt-3">
+		<div class="col-sm-1 mt-3">
+			<p class="font-weight-bold ml-3">{{ loop.index + num_matches }}</p>
+		</div>
+		<div class="col-sm-1 my-1">
+			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+		</div>
+		<div class="col-sm-3 mt-3">
+			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{ key }}</a>
+		</div>
+		<div class="col-sm-5 mt-3">
+			<p>Waiting for a response</p>
+		</div>
+	</div>
+	{% endfor %}
 </div>
 {% endblock %}
