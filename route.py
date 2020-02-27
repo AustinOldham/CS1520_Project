@@ -141,7 +141,7 @@ def match_list():
 	matched_usernames = []
 	for user in liked_users.keys():
 		if username in data.get_liked_users(user).keys():
-			matched_users.append(user)
+			matched_usernames.append(user)
 	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_users=len(matched_users), page_index=0)
 
 
