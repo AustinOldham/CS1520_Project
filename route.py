@@ -1,7 +1,7 @@
 from flask import render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
-from flask_socketio import SocketIO
+#from flask_socketio import SocketIO
 import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -11,7 +11,7 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
-socketio = SocketIO(app)
+#socketio = SocketIO(app)
 
 @app.route('/')
 @app.route('/index.html')
