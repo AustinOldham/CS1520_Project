@@ -142,7 +142,7 @@ def match_list():
 	for user in liked_users.keys():
 		if username in data.get_liked_users(user).keys():
 			matched_usernames.append(user)
-	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_users=len(matched_users), page_index=0)
+	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, page_index=0)
 
 
 @app.route('/error')
