@@ -139,10 +139,13 @@ def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
 	matched_usernames = []
+	waiting_usernames = []
 	for user in liked_users.keys():
 		if username in data.get_liked_users(user).keys():
 			matched_usernames.append(user)
-	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, page_index=0)
+		else:
+			waiting_usernames.append(user)
+	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, waiting=waiting_usernames, page_index=0)
 
 
 @app.route('/error')
