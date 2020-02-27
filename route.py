@@ -128,6 +128,7 @@ def unlike_user(other_username):
 @app.route('/findmatch')
 def find_match():
 	other_username = data.make_match(session['user'])
+	print(data.get_liked_users(session['user'])
 	if other_username:
 		return redirect(url_for('profile_page', username=other_username))
 	else:
