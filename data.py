@@ -9,7 +9,7 @@ import json
 
 # Everyone will likely have a different project ID. Put yours here so the
 # datastore stuff works
-_PROJECT_ID = 'roommate-tinder0'
+_PROJECT_ID = 'roommate-tinder'
 _USER_ENTITY = 'roommate_user'
 
 MAX_LIKED_TIME = timedelta(days=30)
