@@ -150,7 +150,9 @@ def match_list():
 @app.route('/chat/<user>/<other>')
 def load_chatroom():
 	username = session['user']
-	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other)
+	curr_user = user
+	matched_user = other
+	return render_template('chatroom.html', page_title="Chat", current_user=curr_user, other_user=matched_user)
 
 @app.route('/error')
 def error_page():
