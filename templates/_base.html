@@ -21,6 +21,7 @@
 				<li class="nav-item {% block nav_index%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('root') }}">Home</a>
 				</li>
+				{% if session['user'] %}
 				<li class="nav-item {% block nav_match%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('find_match') }}">Find a Match</a>
 				</li>
@@ -30,6 +31,7 @@
 				<li class="nav-item {% block nav_matchlist%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('match_list') }}">My Matches</a>
 				</li>
+				{% endif %}
 			</ul>
 		</div>
 		<div class="navbar-collapse collapse order-2" id="navbarNavDropdown">
