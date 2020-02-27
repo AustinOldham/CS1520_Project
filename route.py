@@ -128,7 +128,6 @@ def unlike_user(other_username):
 @app.route('/findmatch')
 def find_match():
 	other_username = data.make_match(session['user'])
-	print(data.get_liked_users(session['user'])
 	if other_username:
 		return redirect(url_for('profile_page', username=other_username))
 	else:
@@ -139,11 +138,11 @@ def find_match():
 def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
-	matched_users = []
-	for user in liked_users:
-		if username in data.get_liked_users(user):
+	matched_usernames = []
+	for user in liked_users.keys():
+		if username in data.get_liked_users(user).keys():
 			matched_users.append(user)
-	return render_template('matchlist.html', page_title="My Matches", matches=matched_users, num_users=len(matched_users), page_index=0)
+	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_users=len(matched_users), page_index=0)
 
 
 @app.route('/error')
