@@ -145,8 +145,12 @@ def match_list():
 			matched_usernames.append(user)
 		else:
 			waiting_usernames.append(user)
-	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
+	return render_template('matchlist.html', page_title="My Matches", current_user=username matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
+@app.route('/chat/<user>/<other>')
+def load_chatroom():
+	username = session['user']
+	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other)
 
 @app.route('/error')
 def error_page():
