@@ -211,21 +211,26 @@ def save_about_user(username, about):
     client.put(user)
 
 
-def create_data():
+def create_data(num):
     """You can use this function to populate the datastore with some basic
     data."""
 
-    client = _get_client()
-    entity = datastore.Entity(client.key(_USER_ENTITY, 'testuser'),
-                              exclude_from_indexes=[])
-    entity.update({
-        'username': 'testuser',
-        'passwordhash': '',
-        'email': '',
-        'about': '',
-        # 'completions': [],
-    })
-    client.put(entity)
+    for i in range(num):
+        client = _get_client()
+        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
+        entity['username'] = 'sample_username{}'.format(i)
+        entity['email'] = 'sample_email{}@example.com'.format(i)
+        entity['passwordhash'] = get_password_hash(i)
+        entity['about'] = 'Sample about section {}'.format(i)
+        entity['firstname'] = 'First{}'.format(i)
+        entity['lastname'] = 'Last{}'.format(i)
+        entity['age'] = str(i)
+        entity['gender'] = 'gender{}'.format(i)
+        entity['state'] = 'PA'
+        entity['city'] = 'Pittsburgh'
+        entity['bio'] = 'Sample bio {}'.format(i)
+        entity['liked_users'] = ''
+        client.put(entity)
 
 
 def get_password_hash(pw):
