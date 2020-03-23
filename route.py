@@ -13,10 +13,12 @@ error_codes = {
 
 #socketio = SocketIO(app)
 
+
 @app.route('/')
 @app.route('/index.html')
 def root():
 	return render_template('index.html', page_title='Home')
+
 
 @app.route('/signup.html')
 def signup():
@@ -104,10 +106,12 @@ def update_profile():
 	lastname = request.form.get('lastname')
 	age = request.form.get('age')
 	gender = request.form.get('gender')
+	state = request.form.get('state')
+	city = request.form.get('city')
 	about = request.form.get('about')
 	bio = request.form.get('bio')
 	username = session['user']
-	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
+	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, about=about, bio=bio)
 	return redirect(url_for('profile_page', username=username))
 
 
