@@ -220,7 +220,7 @@ def create_data(num):
         entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
         entity['username'] = 'sample_username{}'.format(i)
         entity['email'] = 'sample_email{}@example.com'.format(i)
-        entity['passwordhash'] = get_password_hash(i)
+        entity['passwordhash'] = get_password_hash(str(i))
         entity['about'] = 'Sample about section {}'.format(i)
         entity['firstname'] = 'First{}'.format(i)
         entity['lastname'] = 'Last{}'.format(i)
