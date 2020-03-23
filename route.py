@@ -160,6 +160,7 @@ def error_page():
 
 @app.route('/addsampleusers/<num>')
 def add_sample_users(num):
+	num = int(num)
 	if num > 1000:
 		num = 1000  # Caps the maximum number
 	if session['user'] == 'admin':  # Only allow the admin to do this.
