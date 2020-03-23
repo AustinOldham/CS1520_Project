@@ -16,7 +16,7 @@ MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', bio='', liked_users=''):
         self.username = username
         self.email = email
         self.about = about
@@ -24,6 +24,8 @@ class User(object):
         self.lastname = lastname
         self.age = age
         self.gender = gender
+        self.state = state
+        self.city = city
         self.bio = bio
         self.liked_users = liked_users
 
@@ -79,7 +81,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'], liked_users=user['liked_users'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], liked_users=user['liked_users'])
     return None
 
 
@@ -100,12 +102,12 @@ def load_public_user(username):
 
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     if user:
-        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'])
     else:
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, about, bio):
+def save_user_profile(username, firstname, lastname, age, gender, city, state, about, bio):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -114,6 +116,8 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
+    user['state'] = state
+    user['city'] = city
     user['about'] = about
     user['bio'] = bio
     client.put(user)
@@ -191,6 +195,8 @@ def save_new_user(user, passwordhash):
     entity['lastname'] = ''
     entity['age'] = ''
     entity['gender'] = ''
+    entity['state'] = ''
+    entity['city'] = ''
     entity['bio'] = ''
     entity['liked_users'] = ''
     client.put(entity)
