@@ -64,7 +64,7 @@ def profile_page(username):
 	is_liked = False
 	if username in liked_dict:
 		is_liked = True
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
 @app.route('/profile')
@@ -100,15 +100,16 @@ def register_user():
 # TODO: Fill in each text area with what the user already has so the information is not wiped each time.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
-	firstname = request.form.get('firstname')
-	lastname = request.form.get('lastname')
-	age = request.form.get('age')
-	gender = request.form.get('gender')
-	about = request.form.get('about')
-	bio = request.form.get('bio')
-	username = session['user']
-	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
-	return redirect(url_for('profile_page', username=username))
+    firstname = request.form.get('firstname')
+    lastname = request.form.get('lastname')
+    age = request.form.get('age')
+    gender = request.form.get('gender')
+    about = request.form.get('about')
+    bio = request.form.get('bio')
+    avatar = request.form.get('avatar')
+    username = session['user']
+    data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio, avatar=avatar)
+    return redirect(url_for('profile_page', username=username))
 
 
 @app.route('/likeuser/<other_username>')
