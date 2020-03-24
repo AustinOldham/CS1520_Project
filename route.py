@@ -1,17 +1,24 @@
 from flask import render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
-#from flask_socketio import SocketIO
+import redis
+import datetime
 import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
+
+red = redis.StrictRedis()
+
+def event_stream():
+	pubsub = red.pubsub()
+	pubsub.subscribe('chat')
+	return pubsub.listen()
+
 
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
-
-#socketio = SocketIO(app)
 
 @app.route('/')
 @app.route('/index.html')
@@ -147,10 +154,18 @@ def match_list():
 			waiting_usernames.append(user)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
+@app.route('/post')
+def post():
+	username = session['user']
+	now = datetime.datetime.now().replace(microsecond=0).time()
+    red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
+	return render_template('postroom.html', page_title="Post", current_user=user)
+
 @app.route('/chat/<user>/<other>')
 def load_chatroom(user, other):
 	username = session['user']
-	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other)
+	feed = event_stream()
+	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/error')
 def error_page():

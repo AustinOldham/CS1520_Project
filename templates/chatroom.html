@@ -2,4 +2,13 @@
 {% block nav_index %}active{% endblock %}
 {% block content %}
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
+<div class="container" style="word-wrap: break-word;">
+	<!-- For loop logic of jinja template -->
+	<!-- If a 0-indexed loop is required, use loop.index0 instead  -->
+	{% for key in messages %}
+	<div class="row bg-light rounded mt-3">
+		<p>{{ key }}</p>
+	</div>
+	{% endfor %}
+</div>
 {% endblock %}
