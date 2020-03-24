@@ -23,6 +23,7 @@ error_codes = {
 @app.route('/')
 @app.route('/index.html')
 def root():
+	log('loading index')
 	return render_template('index.html', page_title='Home')
 
 @app.route('/signup.html')
@@ -156,6 +157,7 @@ def match_list():
 
 @app.route('/post')
 def post():
+	log('entering posting')
 	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
     red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
@@ -163,6 +165,7 @@ def post():
 
 @app.route('/chat/<user>/<other>')
 def load_chatroom(user, other):
+	log('entering stream')
 	username = session['user']
 	feed = event_stream()
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
