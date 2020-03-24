@@ -160,7 +160,7 @@ def post():
 	log('entering posting')
 	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
-    red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
+    #red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
 	return render_template('postroom.html', page_title="Post", current_user=user)
 
 @app.route('/chat/<user>/<other>')
