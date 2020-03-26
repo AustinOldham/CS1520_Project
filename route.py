@@ -66,7 +66,7 @@ def profile_page(username):
 	is_liked = False
 	if username in liked_dict:
 		is_liked = True
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
 @app.route('/profile')
@@ -110,8 +110,9 @@ def update_profile():
 	city = request.form.get('city')
 	about = request.form.get('about')
 	bio = request.form.get('bio')
+	avatar = request.form.get('avatar')
 	username = session['user']
-	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, about=about, bio=bio)
+	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, about=about, bio=bio, avatar=avatar)
 	return redirect(url_for('profile_page', username=username))
 
 

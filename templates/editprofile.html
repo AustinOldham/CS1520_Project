@@ -1,6 +1,42 @@
 {% extends '_base.html' %}
+{% block head %}
+	{{ super() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/image-picker.min.js"></script>
+{% endblock %}
 {% block content %}
+
 <form method="post" action="/updateprofile">
+    <div>
+        <label for="avatarInput">Profile Image</label>
+        <select class="image-picker" name="avatar" id="avatarInput">
+            <option data-img-src="/static/images/mario.png" data-img-class="first" data-img-alt="Mario" value="mario.png"/>
+            <option data-img-src="/static/images/luigi.png" data-img-alt="Luigi" value="luigi.png"/>
+            <option data-img-src="/static/images/peach.png" data-img-alt="Peach" value="peach.png"/>
+            <option data-img-src="/static/images/yoshi.png" data-img-alt="Yoshi" value="yoshi.png"/>
+            <option data-img-src="/static/images/bowser.png" data-img-alt="Bowser" value="bowser.png"/>
+            <option data-img-src="/static/images/dk.png" data-img-alt="Donkey Kong" value="dk.png"/>
+            <option data-img-src="/static/images/mushroom.png" data-img-alt="Mushroom" value="mushroom.png"/>
+            <option data-img-src="/static/images/flower.png" data-img-alt="Flower" value="flower.png"/>
+            <option data-img-src="/static/images/star.png" data-img-alt="Star" value="star.png"/>
+            <option data-img-src="/static/images/egg.png" data-img-alt="Egg" value="egg.png"/>
+            <option data-img-src="/static/images/block.png" data-img-alt="Block" value="block.png"/>
+            <option data-img-src="/static/images/link.png" data-img-alt="Link" value="link.png"/>
+            <option data-img-src="/static/images/linklogo.png" data-img-alt="Link Logo" value="linklogo.png"/>
+            <option data-img-src="/static/images/ac1.png" data-img-alt="Animal Crossing 1" value="ac1.png"/>
+            <option data-img-src="/static/images/ac2.png" data-img-alt="Animal Crossing 2" value="ac2.png"/>
+            <option data-img-src="/static/images/ac3.png" data-img-alt="Animal Crossing 3" value="ac3.png"/>
+            <option data-img-src="/static/images/pikmin1.png" data-img-alt="Red Pikmin" value="pikmin1.png"/>
+            <option data-img-src="/static/images/pikmin2.png" data-img-alt="Blue Pikmin" value="pikming2.png"/>
+            <option data-img-src="/static/images/pikmin3.png" data-img-alt="Yellow Pikmin" value="pikming3.png"/>
+            <option data-img-src="/static/images/hat.png" data-img-alt="Hat" value="hat.png"/>
+            <option data-img-src="/static/images/goomba.png" data-img-alt="Goomba" value="goomba.png"/>
+            <option data-img-src="/static/images/dino.png" data-img-alt="Dino" value="dino.png"/>
+            <option data-img-src="/static/images/kirby.png" data-img-alt="Kirby" value="kirby.png"/>
+            <option data-img-src="/static/images/meta.png" data-img-alt="Meta Knight" value="meta.png"/>
+            <option data-img-src="/static/images/toad.png" data-img-alt="Toad" data-img-class="last" value="toad.png"/>
+         </select>
+    </div>
     <div class="form-group">
         <label for="firstNameInput">First Name</label>
         <input type="text" name="firstname" class="form-control" id="firstNameInput">
@@ -89,4 +125,12 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+<script> 
+    $('.image-picker').imagepicker();
+    const images = document.getElementsByClassName('image_picker_image');
+    for(let i = 0; i < images.length; i++) {
+        images[i].style.height = "100px";
+        images[i].style.cursor = "pointer";
+    }
+</script>
 {% endblock %}
