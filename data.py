@@ -16,7 +16,7 @@ MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users='', avatar=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', bio='', liked_users='', avatar=''):
         self.username = username
         self.email = email
         self.about = about
@@ -24,6 +24,8 @@ class User(object):
         self.lastname = lastname
         self.age = age
         self.gender = gender
+        self.state = state
+        self.city = city
         self.bio = bio
         self.liked_users = liked_users
         self.avatar = avatar
@@ -81,7 +83,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
     return None
 
 
@@ -102,12 +104,12 @@ def load_public_user(username):
 
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     if user:
-        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'], avatar=user['avatar'])
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], avatar=user['avatar'])
     else:
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, about, bio, avatar):
+def save_user_profile(username, firstname, lastname, age, gender, city, state, about, bio, avatar):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -116,6 +118,8 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio, av
     user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
+    user['state'] = state
+    user['city'] = city
     user['about'] = about
     user['bio'] = bio
     user['avatar'] = avatar
@@ -194,8 +198,11 @@ def save_new_user(user, passwordhash):
     entity['lastname'] = ''
     entity['age'] = ''
     entity['gender'] = ''
+    entity['state'] = ''
+    entity['city'] = ''
     entity['bio'] = ''
     entity['liked_users'] = ''
+    entity['avatar'] = ''
     client.put(entity)
 
 
@@ -208,21 +215,27 @@ def save_about_user(username, about):
     client.put(user)
 
 
-def create_data():
+def create_data(num):
     """You can use this function to populate the datastore with some basic
     data."""
 
-    client = _get_client()
-    entity = datastore.Entity(client.key(_USER_ENTITY, 'testuser'),
-                              exclude_from_indexes=[])
-    entity.update({
-        'username': 'testuser',
-        'passwordhash': '',
-        'email': '',
-        'about': '',
-        # 'completions': [],
-    })
-    client.put(entity)
+    for i in range(num):
+        client = _get_client()
+        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
+        entity['username'] = 'sample_username{}'.format(i)
+        entity['email'] = 'sample_email{}@example.com'.format(i)
+        entity['passwordhash'] = get_password_hash(str(i))
+        entity['about'] = 'Sample about section {}'.format(i)
+        entity['firstname'] = 'First{}'.format(i)
+        entity['lastname'] = 'Last{}'.format(i)
+        entity['age'] = str(i)
+        entity['gender'] = 'gender{}'.format(i)
+        entity['state'] = 'PA'
+        entity['city'] = 'Pittsburgh'
+        entity['bio'] = 'Sample bio {}'.format(i)
+        entity['liked_users'] = ''
+        entity['avatar'] = 'mushroom.png'
+        client.put(entity)
 
 
 def get_password_hash(pw):
