@@ -167,7 +167,7 @@ def load_chatroom(user, other):
 	username = session['user']
 	if request.method == 'POST':
 		#Append message from form
-        message = request.form.get('message')
+        message = request.form['message']
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		feed.append(message)
 	else:
