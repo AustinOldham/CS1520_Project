@@ -3,15 +3,8 @@ from email.utils import parseaddr
 from main import app
 import datetime
 import data
-import redis
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
-red = redis.StrictRedis()
-
-def event_stream():
-	pubsub = red.pubsub()
-	pubsub.subscribe('chat')
-	return pubsub.listen()
 
 feed = []
 # Dictionary that contains the messages that will be displayed on error.html.
@@ -168,9 +161,19 @@ def load_chatroom(user, other):
 		sent = request.form['message']
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-		red.publish('chat', message)
+		feed.append(messages)
 	feed.append(event_stream())
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
+
+@app.route('/stream')
+def stream():
+    def eventStream():
+        while True:
+            # wait for source data to be available, then push it
+			if len(feed) > len(previous_feed):
+            	yield 'data: {}\n\n'.format(feed[-1])
+				previous_feed = feed
+    return Response(eventStream(), mimetype="text/event-stream")
 
 @app.route('/error')
 def error_page():

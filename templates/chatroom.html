@@ -1,6 +1,18 @@
 {% extends '_base.html' %}
 {% block nav_index %}active{% endblock %}
 {% block content %}
+<script type="text/javascript">
+
+	function sse()
+	{
+		var targetContainer = document.getElementById("message-list");
+		var eventSource = new EventSource("/stream");
+		eventSource.onmessage = function(e) {
+    		targetContainer.appendChild(e.data);
+		};	
+	}
+	sse();
+</script>
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
 <div class="container" style="word-wrap: break-word;">
 	<!-- For loop logic of jinja template -->
@@ -10,6 +22,11 @@
 		<p>{{ key }}</p>
 	</div>
 	{% endfor %}
+</div>
+<div class="container" style="word-wrap: break-word;">
+	<ul class = "no-bullet" id="message-list">
+        <li>List item 1</li>
+    </ul>
 </div>
 <form method="post" action="/chat/{{current_user}}/{{other_user}}">
     <div class="form-group">
