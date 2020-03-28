@@ -166,7 +166,8 @@ def post():
 def load_chatroom(user, other):
 	username = session['user']
 	#replace with getting messages from channel
-	feed = ['Hi', 'Bye']
+	now = datetime.datetime.now().replace(microsecond=0).time()
+	feed = [u'[%s] %s HI' % (now.isoformat(), username), u'[%s] %s BYE' % (now.isoformat(), username)]
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/error')
