@@ -156,14 +156,24 @@ def post():
 '''
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
+
+	def eventStream():
+		while True:
+			# wait for source data to be available, then push it
+			if len(feed) > len(previous_feed):
+				yield 'data: {}\n\n'.format(feed[-1])
+				previous_feed = feed
+	
 	username = session['user']
 	if request.method == 'POST':
 		sent = request.form['message']
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		feed.append(message)
+		return Response(eventStream(), mimetype="text/event-stream")
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
+'''
 @app.route('/stream')
 def stream():
 	def eventStream():
@@ -173,7 +183,7 @@ def stream():
 				yield 'data: {}\n\n'.format(feed[-1])
 				previous_feed = feed
 	return Response(eventStream(), mimetype="text/event-stream")
-
+'''
 @app.route('/error')
 def error_page():
 	value = request.args['error_type']
