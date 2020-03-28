@@ -14,7 +14,7 @@ def event_stream():
 	pubsub.subscribe('chat')
 	return pubsub.listen()
 '''
-
+feed = []
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
@@ -162,12 +162,19 @@ def post():
     #red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
 	return render_template('postroom.html', page_title="Post", current_user=user)
 '''
-@app.route('/chat/<user>/<other>')
+@app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
 	username = session['user']
-	#replace with getting messages from channel
-	now = datetime.datetime.now().replace(microsecond=0).time()
-	feed = [u'[%s] %s HI' % (now.isoformat(), username), u'[%s] %s BYE' % (now.isoformat(), username)]
+	if request.method == 'POST':
+		#Append message from form
+        message = request.form.get('message')
+		now = datetime.datetime.now().replace(microsecond=0).time()
+		feed.append(message)
+	else:
+		#Append constructed message
+		now = datetime.datetime.now().replace(microsecond=0).time()
+		feed.append(u'[%s] %s HI' % (now.isoformat(), username))
+		feed.append(u'[%s] %s BYE' % (now.isoformat(), username)))
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/error')

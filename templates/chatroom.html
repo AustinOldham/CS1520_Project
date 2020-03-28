@@ -11,4 +11,11 @@
 	</div>
 	{% endfor %}
 </div>
+<form method="post" action="/chat/{{current_user}}/{{other_user}}">
+    <div class="form-group">
+        <label for="messageInput">Type message here</label>
+        <input type="text" name="message" class="form-control" id="messageInput">
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
 {% endblock %}
