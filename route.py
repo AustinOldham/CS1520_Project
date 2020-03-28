@@ -8,6 +8,7 @@ import data
 
 feed = []
 previous_feed = []
+
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
@@ -147,25 +148,15 @@ def match_list():
 			waiting_usernames.append(user)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
-'''
-@app.route('/post')
-def post():
-	username = session['user']
-	now = datetime.datetime.now().replace(microsecond=0).time()
-    #red.publish('chat', u'[%s] %s' % (now.isoformat(), username))
-	return render_template('postroom.html', page_title="Post", current_user=user)
-'''
+def eventStream(feed, previous_feed):
+	while True:
+		# wait for source data to be available, then push it
+		if len(feed) > len(previous_feed):
+			yield 'data: {}\n\n'.format(feed[-1])
+			previous_feed = feed
+
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
-	global feed
-	global previous_feed
-	
-	def eventStream():
-		while True:
-			# wait for source data to be available, then push it
-			if len(feed) > len(previous_feed):
-				yield 'data: {}\n\n'.format(feed[-1])
-				previous_feed = feed
 	
 	username = session['user']
 	if request.method == 'POST':
@@ -173,7 +164,7 @@ def load_chatroom(user, other):
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		feed.append(message)
-		return Response(eventStream(), mimetype="text/event-stream")
+		return Response(eventStream(feed, previous_feed), mimetype="text/event-stream")
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 '''
