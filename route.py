@@ -7,6 +7,7 @@ import data
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
 feed = []
+previous_feed = []
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
@@ -156,8 +157,8 @@ def post():
 '''
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
+
 	
-	previous_feed = []
 	def eventStream():
 		while True:
 			# wait for source data to be available, then push it
