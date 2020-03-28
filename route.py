@@ -165,7 +165,8 @@ def post():
 @app.route('/chat/<user>/<other>')
 def load_chatroom(user, other):
 	username = session['user']
-	feed = ['Hi']
+	#replace with getting messages from channel
+	feed = ['Hi', 'Bye']
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/error')
