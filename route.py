@@ -156,7 +156,8 @@ def post():
 '''
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
-
+	
+	previous_feed = []
 	def eventStream():
 		while True:
 			# wait for source data to be available, then push it
