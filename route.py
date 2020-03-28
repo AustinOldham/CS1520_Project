@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import Response, render_template, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
 import datetime
