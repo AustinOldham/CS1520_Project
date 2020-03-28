@@ -157,7 +157,8 @@ def post():
 '''
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
-
+	global feed
+	global previous_feed
 	
 	def eventStream():
 		while True:
