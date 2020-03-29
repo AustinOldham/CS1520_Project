@@ -4,31 +4,33 @@
 <script type="text/javascript">
 
 	function sse()
-	{
-		var targetContainer = document.getElementById("message-list");
-		var eventSource = new EventSource("/stream");
-		eventSource.onmessage = function(e) {
-    		targetContainer.appendChild(e.data);
+	{  		
+		var myEventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
+		var otherEventSource = new EventSource("/chat/{{other_user}}/{{current_user}}");
+
+		myEventSource.onmessage = function(e) {
+			var ul = document.getElementById("list");
+			var li = document.createElement("li");
+  			li.appendChild(document.createTextNode(e.data));
+  			ul.appendChild(li);
+		};
+
+		otherEventSource.onmessage = function(e) {
+			var ul = document.getElementById("list");
+			var li = document.createElement("li");
+  			li.appendChild(document.createTextNode(e.data));
+  			ul.appendChild(li);
 		};
 	}
 	sse();
 </script>
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
 <div class="container" style="word-wrap: break-word;">
-	<!-- For loop logic of jinja template -->
-	<!-- If a 0-indexed loop is required, use loop.index0 instead  -->
-	{% for key in messages %}
-	<div class="row bg-light rounded mt-3">
-		<p>{{ key }}</p>
-	</div>
-	{% endfor %}
-</div>
-<div class="container" style="word-wrap: break-word;">
-	<ul class = "no-bullet" id="message-list">
+	<ul class = "no-bullet" id="list">
         <li>List item 1</li>
     </ul>
 </div>
-<form method="post" action="/stream">
+<form method="post" action="/chat/{{current_user}}/{{other_user}}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">

@@ -1,4 +1,4 @@
-from flask import Response, render_template, request, session, redirect, url_for
+from flask import Response, render_template, make_response, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
 import datetime
@@ -148,15 +148,24 @@ def match_list():
 			waiting_usernames.append(user)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
+
+
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
-	
+
+	yield 'data: %s\n\n' % (message)
 	username = session['user']
 	if request.method == 'POST':
+
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-		feed.append(message)
 		app.logger.info('Message: %s', message)
+
+		response = make_response(render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed))
+		response.data = message
+		response.mimetype = "text/event-stream"
+		return response
+
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/stream', methods=['POST'])
@@ -164,7 +173,7 @@ def stream():
 	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
 	message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-	return Response(message, mimetype="text/event-stream")
+	return Response(pushData(), mimetype="text/event-stream")
 
 @app.route('/error')
 def error_page():
