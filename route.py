@@ -148,12 +148,16 @@ def match_list():
 			waiting_usernames.append(user)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
+'''
 def eventStream(feed, previous_feed):
 	while True:
 		# wait for source data to be available, then push it
+		app.logger.info('%s logged in successfully', user.username)
 		if len(feed) > len(previous_feed):
+			app.logger.info('%s %s logged in successfully', user.username)
 			yield 'data: {}\n\n'.format(feed[-1])
 			previous_feed = feed
+'''
 
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
@@ -164,7 +168,8 @@ def load_chatroom(user, other):
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		feed.append(message)
-		return Response(eventStream(feed, previous_feed), mimetype="text/event-stream")
+		app.logger.info('Message: %s', message)
+		return Response('data: {}\n\n'.format(message), mimetype="text/event-stream")
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 '''
