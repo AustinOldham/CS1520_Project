@@ -6,7 +6,7 @@
 	function sse()
 	{
 		var targetContainer = document.getElementById("message-list");
-		var eventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
+		var eventSource = new EventSource("/stream");
 		eventSource.onmessage = function(e) {
     		targetContainer.appendChild(e.data);
 		};
@@ -28,7 +28,7 @@
         <li>List item 1</li>
     </ul>
 </div>
-<form method="post" action="/chat/{{current_user}}/{{other_user}}">
+<form method="post" action="/stream">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">
