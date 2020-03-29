@@ -69,9 +69,9 @@ def profile_page(username):
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
-@app.route('/profile')
-def profile_list():
-	return render_template('profilelist.html', page_title="Profile List")
+@app.route('/browse')
+def browse():
+	return render_template('browse.html', page_title="Browse")
 
 
 # TODO: Ensure that the username is unique
