@@ -161,6 +161,7 @@ def load_chatroom(user, other):
 
 @app.route('/stream', methods=['POST'])
 def stream():
+	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
 	message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 	return Response(message, mimetype="text/event-stream")
