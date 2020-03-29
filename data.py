@@ -220,7 +220,7 @@ def save_about_user(username, about):
     client.put(user)
 
 
-def create_data(num):
+def create_data(num=50, state='PA', city='Pittsburgh'):
     """You can use this function to populate the datastore with some basic
     data."""
 
