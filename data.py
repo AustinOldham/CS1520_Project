@@ -3,6 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 import hashlib
 import json
+import random
 
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -176,12 +177,17 @@ def save_liked_users(liked_dict, username):
 def make_match(username):
     """Matches with a random user"""
     client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+
     q = client.query(kind=_USER_ENTITY)
+    q.add_filter('state', '=', user['state'])
+    q.add_filter('city', '=', user['city'])
+
     liked_dict = get_liked_users(username)
     results = list(q.fetch(100))  # Adds a limit to the maximum number of results
-    for user in results:
-        if (user['username'] not in liked_dict and user['username'] != username):
-            return user['username']
+    for potential_match in results:
+        if (potential_match['username'] not in liked_dict and potential_match['username'] != username):
+            return potential_match['username']
     return ''
 
 
@@ -215,14 +221,16 @@ def save_about_user(username, about):
     client.put(user)
 
 
-def create_data(num):
+def create_data(num=50, state='PA', city='Pittsburgh'):
     """You can use this function to populate the datastore with some basic
     data."""
 
+    random_id = random.randint(0, 2147483647)
+
     for i in range(num):
         client = _get_client()
-        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
-        entity['username'] = 'sample_username{}'.format(i)
+        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}_{}'.format(random_id, i)))
+        entity['username'] = 'sample_username{}_{}'.format(random_id, i)
         entity['email'] = 'sample_email{}@example.com'.format(i)
         entity['passwordhash'] = get_password_hash(str(i))
         entity['about'] = 'Sample about section {}'.format(i)
@@ -230,8 +238,8 @@ def create_data(num):
         entity['lastname'] = 'Last{}'.format(i)
         entity['age'] = str(i)
         entity['gender'] = 'gender{}'.format(i)
-        entity['state'] = 'PA'
-        entity['city'] = 'Pittsburgh'
+        entity['state'] = state
+        entity['city'] = city
         entity['bio'] = 'Sample bio {}'.format(i)
         entity['liked_users'] = ''
         entity['avatar'] = 'mushroom.png'
