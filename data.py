@@ -229,7 +229,7 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
 
     for i in range(num):
         client = _get_client()
-        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
+        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}_{}'.format(random_id, i)))
         entity['username'] = 'sample_username{}_{}'.format(random_id, i)
         entity['email'] = 'sample_email{}@example.com'.format(i)
         entity['passwordhash'] = get_password_hash(str(i))
