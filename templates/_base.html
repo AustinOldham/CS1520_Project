@@ -27,8 +27,8 @@
 				<li class="nav-item {% block nav_match%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('find_match') }}">Find a Match</a>
 				</li>
-				<li class="nav-item {% block nav_profilelistg%}{% endblock %}">
-					<a class="nav-link" href="{{ url_for('profile_list') }}">Browse</a>
+				<li class="nav-item {% block nav_browse%}{% endblock %}">
+					<a class="nav-link" href="{{ url_for('browse') }}">Browse</a>
 				</li>
 				<li class="nav-item {% block nav_matchlist%}{% endblock %}">
 					<a class="nav-link" href="{{ url_for('match_list') }}">My Matches</a>
