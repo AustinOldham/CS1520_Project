@@ -176,12 +176,17 @@ def save_liked_users(liked_dict, username):
 def make_match(username):
     """Matches with a random user"""
     client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+
     q = client.query(kind=_USER_ENTITY)
+    q.add_filter('state', '=', user['state'])
+    q.add_filter('city', '=', user['city'])
+
     liked_dict = get_liked_users(username)
     results = list(q.fetch(100))  # Adds a limit to the maximum number of results
-    for user in results:
-        if (user['username'] not in liked_dict and user['username'] != username):
-            return user['username']
+    for potential_match in results:
+        if (potential_match['username'] not in liked_dict and potential_match['username'] != username):
+            return potential_match['username']
     return ''
 
 
