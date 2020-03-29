@@ -6,10 +6,10 @@
 	function sse()
 	{
 		var targetContainer = document.getElementById("message-list");
-		var eventSource = new EventSource("/stream");
+		var eventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
 		eventSource.onmessage = function(e) {
     		targetContainer.appendChild(e.data);
-		};	
+		};
 	}
 	sse();
 </script>
