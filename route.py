@@ -161,9 +161,9 @@ def error_page():
 
 @app.route('/addsampleusers/')
 def add_sample_users():
-	num = int(request.args.get('num'))
+	num = int(request.args.get('num', '50'))
 	if num is not None and num > 1000:
 		num = 1000  # Caps the maximum number
 	if session['user'] == 'admin':  # Only allow the admin to do this.
-		data.create_data(num=num, state=request.args.get('state'), city=request.args.get('city'))
+		data.create_data(num=num, state=request.args.get('state', 'PA'), city=request.args.get('city', 'Pittsburgh'))
 	return "success", 200
