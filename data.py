@@ -3,6 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 import hashlib
 import json
+import random
 
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -224,10 +225,12 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
     """You can use this function to populate the datastore with some basic
     data."""
 
+    random_id = random.randint(0, 2147483647)
+
     for i in range(num):
         client = _get_client()
         entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}'.format(i)))
-        entity['username'] = 'sample_username{}'.format(i)
+        entity['username'] = 'sample_username{}_{}'.format(random_id, i)
         entity['email'] = 'sample_email{}@example.com'.format(i)
         entity['passwordhash'] = get_password_hash(str(i))
         entity['about'] = 'Sample about section {}'.format(i)
@@ -235,8 +238,8 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
         entity['lastname'] = 'Last{}'.format(i)
         entity['age'] = str(i)
         entity['gender'] = 'gender{}'.format(i)
-        entity['state'] = 'PA'
-        entity['city'] = 'Pittsburgh'
+        entity['state'] = state
+        entity['city'] = city
         entity['bio'] = 'Sample bio {}'.format(i)
         entity['liked_users'] = ''
         entity['avatar'] = 'mushroom.png'
