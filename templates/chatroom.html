@@ -5,8 +5,7 @@
 
 	function sse()
 	{  		
-		var myEventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
-		var otherEventSource = new EventSource("/chat/{{other_user}}/{{current_user}}");
+		var myEventSource = new EventSource("/stream");
 
 		console.log("sse() executing")
 
@@ -18,7 +17,7 @@
   			ul.appendChild(li);
 			console.log("myEventSource triggered")
 		};
-
+		/*
 		otherEventSource.onmessage = function(e) {
 			var ul = document.getElementById("list");
 			var li = document.createElement("li");
@@ -26,7 +25,7 @@
   			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
 			console.log("otherEventSourc triggered")
-		};
+		};*/
 	}
 	sse();
 </script>
@@ -36,7 +35,7 @@
         <li>List item 1</li>
     </ul>
 </div>
-<form method="post" action="/chat/{{current_user}}/{{other_user}}">
+<form method="post" action="/stream">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">

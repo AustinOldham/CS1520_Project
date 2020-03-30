@@ -153,10 +153,6 @@ def match_list():
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
 
-	
-	def pushData(message):
-		yield message
-
 	username = session['user']
 	if request.method == 'POST':
 
@@ -165,17 +161,18 @@ def load_chatroom(user, other):
 		app.logger.info('Message: %s', message)
 		feed.append(message + ' py')
 
-		return Response(pushData(message), mimetype="text/event-stream")
-
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
-'''
-@app.route('/stream', methods=['POST'])
+@app.route('/stream')
 def stream():
+
+	def pushData(message):
+		yield message
+		
 	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
 	message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-'''
+	return Response(pushData(message), mimetype="text/event-stream")
 
 @app.route('/error')
 def error_page():
