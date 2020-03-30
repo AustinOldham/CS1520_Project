@@ -8,12 +8,15 @@
 		var myEventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
 		var otherEventSource = new EventSource("/chat/{{other_user}}/{{current_user}}");
 
+		console.log("sse() executing")
+
 		myEventSource.onmessage = function(e) {
 			var ul = document.getElementById("list");
 			var li = document.createElement("li");
 			var str = "JS "
   			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
+			console.log("myEventSource triggered")
 		};
 
 		otherEventSource.onmessage = function(e) {
@@ -22,6 +25,7 @@
 			var str = "JS "
   			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
+			console.log("otherEventSourc triggered")
 		};
 	}
 	sse();
