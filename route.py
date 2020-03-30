@@ -163,7 +163,7 @@ def load_chatroom(user, other):
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
-@app.route('/stream', method=['GET','POST'])
+@app.route('/stream', methods=['GET','POST'])
 def stream():
 
 	def pushData(message):
