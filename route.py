@@ -162,7 +162,7 @@ def load_chatroom(user, other):
 		app.logger.info('Message: %s', message)
 		feed.append(message + ' py')
 
-		return Response(pushData(), mimetype="text/event-stream")
+		return Response(message, mimetype="text/event-stream")
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
