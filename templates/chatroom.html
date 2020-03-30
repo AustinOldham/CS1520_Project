@@ -11,14 +11,16 @@
 		myEventSource.onmessage = function(e) {
 			var ul = document.getElementById("list");
 			var li = document.createElement("li");
-  			li.appendChild(document.createTextNode(e.data));
+			var str = "JS "
+  			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
 		};
 
 		otherEventSource.onmessage = function(e) {
 			var ul = document.getElementById("list");
 			var li = document.createElement("li");
-  			li.appendChild(document.createTextNode(e.data));
+			var str = "JS "
+  			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
 		};
 	}

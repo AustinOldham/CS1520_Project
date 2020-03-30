@@ -160,20 +160,19 @@ def load_chatroom(user, other):
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		app.logger.info('Message: %s', message)
+		feed.append(message + ' py')
 
-		response = make_response(render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed))
-		response.data = message
-		response.mimetype = "text/event-stream"
-		return response
+		return Response(pushData(), mimetype="text/event-stream")
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
+'''
 @app.route('/stream', methods=['POST'])
 def stream():
 	username = session['user']
 	now = datetime.datetime.now().replace(microsecond=0).time()
 	message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-	return Response(pushData(), mimetype="text/event-stream")
+'''
 
 @app.route('/error')
 def error_page():
