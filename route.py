@@ -1,18 +1,18 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import Response, render_template, make_response, request, session, redirect, url_for
 from email.utils import parseaddr
 from main import app
-#from flask_socketio import SocketIO
+import datetime
 import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
+
+feed = []
+previous_feed = []
 
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
-
-#socketio = SocketIO(app)
-
 
 @app.route('/')
 @app.route('/index.html')
@@ -152,8 +152,34 @@ def match_list():
 			matched_usernames.append(user)
 		else:
 			waiting_usernames.append(user)
-	return render_template('matchlist.html', page_title="My Matches", matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
+	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
+
+
+@app.route('/chat/<user>/<other>', methods=['GET','POST'])
+def load_chatroom(user, other):
+
+	username = session['user']
+	if request.method == 'POST':
+
+		now = datetime.datetime.now().replace(microsecond=0).time()
+		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
+		app.logger.info('Message: %s', message)
+		feed.append(message)
+
+	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
+
+@app.route('/stream/<user>/<other>', methods=['GET','POST'])
+def stream(user, other):
+
+	def pushData(message):
+		yield message
+	if request.method == 'POST':
+		username = session['user']
+		now = datetime.datetime.now().replace(microsecond=0).time()
+		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
+		return Response(pushData(message), mimetype="text/event-stream")
+	return redirect('/chat/'+user+'/'+other)
 
 @app.route('/error')
 def error_page():

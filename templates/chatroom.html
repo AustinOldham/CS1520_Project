@@ -1,0 +1,43 @@
+{% extends '_base.html' %}
+{% block nav_index %}active{% endblock %}
+{% block content %}
+<script type="text/javascript">
+
+	function sse()
+	{  		
+		var myEventSource = new EventSource("/stream/{{current_user}}/{{other_user}}");
+
+		console.log("sse() executing")
+
+		myEventSource.onmessage = function(e) {
+			var ul = document.getElementById("list");
+			var li = document.createElement("li");
+  			li.appendChild(document.createTextNode(str.concat(e.data)));
+  			ul.appendChild(li);
+			console.log("myEventSource triggered")
+		};
+		/*
+		otherEventSource.onmessage = function(e) {
+			var ul = document.getElementById("list");
+			var li = document.createElement("li");
+			var str = "JS "
+  			li.appendChild(document.createTextNode(str.concat(e.data)));
+  			ul.appendChild(li);
+			console.log("otherEventSourc triggered")
+		};*/
+	}
+	sse();
+</script>
+<h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
+<div class="container" style="word-wrap: break-word;">
+	<ul class = "no-bullet" id="list">
+    </ul>
+</div>
+<form method="post" action="/stream/{{current_user}}/{{other_user}}">
+    <div class="form-group">
+        <label for="messageInput">Type message here</label>
+        <input type="text" name="message" class="form-control" id="messageInput">
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+{% endblock %}

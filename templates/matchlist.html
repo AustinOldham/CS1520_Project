@@ -20,7 +20,7 @@
 			<p>Match! Send them a message to start chatting</p>
 		</div>
 		<div class="col-sm-2 mt-2">
-			<a href="#" class="btn btn-primary disabled float-right mr-3" role="button">Message</a>
+			<a href="{{ url_for('load_chatroom', user=current_user, other=key) }}" class="btn btn-primary float-right mr-3" role="button">Message</a>
 		</div>
 	</div>
 	{% endfor %} 
