@@ -5,7 +5,7 @@
 
 	function sse()
 	{  		
-		var myEventSource = new EventSource("/stream");
+		var myEventSource = new EventSource("/stream/{{current_user}}/{{other_user}}");
 
 		console.log("sse() executing")
 
@@ -35,7 +35,7 @@
         <li>List item 1</li>
     </ul>
 </div>
-<form method="post" action="/stream">
+<form method="post" action="/stream/{{current_user}}/{{other_user}}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">
