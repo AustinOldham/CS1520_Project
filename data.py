@@ -10,8 +10,9 @@ import random
 
 # Everyone will likely have a different project ID. Put yours here so the
 # datastore stuff works
-_PROJECT_ID = 'roommate-tinder'
+_PROJECT_ID = 'roommate-tinder0'
 _USER_ENTITY = 'roommate_user'
+_CHATROOM_ENTITY = 'chatroom'
 
 MAX_LIKED_TIME = timedelta(days=30)
 
@@ -87,6 +88,57 @@ def load_user(username, passwordhash):
         return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
     return None
 
+def load_chatroom(current_user, other_user):
+    """Load a chatroom based on the hash of the two usernames; if the passwordhash doesn't match
+    the username, then this should return None."""
+
+    client = _get_client()
+    q1 = client.query(kind=_CHATROOM_ENTITY)
+    q2 = client.query(kind=_CHATROOM_ENTITY)
+
+    #generate hash from combination of two usernames
+    keyString = current_user + other_user
+    encoded = keyString.encode('utf-8')
+    key = hashlib.sha256(encoded).hexdigest()
+
+    #hash should be one of two values depending on name order
+    q1.add_filter('Key1', '=', key)
+    q2.add_filter('Key2', '=', key)
+    
+    for chatroom in q1.fetch():
+        return chatroom
+    for chatroom in q2.fetch():
+        return chatroom
+    return None
+
+def save_message(current_user, other_user, message):
+    """Load a chatroom based on the hash of the two usernames; if the passwordhash doesn't match
+    the username, then this should return None."""
+
+    client = _get_client()
+
+    chatroom = load_chatroom_messages(current_user, other_user)
+    chatroom['messages'].append(message)
+    client.put(chatroom)
+
+def save_new_chatroom(current_user, other_user):
+    """Save the chatroom details to the datastore."""
+
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _CHATROOM_ENTITY))
+    
+    #generate hash from combination of two usernames
+    keyString1 = current_user + other_user
+    keyString2 = other_user + current_user
+    code1 = keyString1.encode('utf-8')
+    code2 = keyString1.encode('utf-8')
+    key1 = hashlib.sha256(code1).hexdigest()
+    key2 = hashlib.sha256(code2).hexdigest()
+
+    entity['key1'] = key1
+    entity['key2'] = key2
+    entity['Messages'] = []
+    client.put(entity)
 
 # Note: This may be removed in the future
 def load_about_user(username):

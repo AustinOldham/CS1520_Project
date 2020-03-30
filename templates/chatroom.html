@@ -5,7 +5,7 @@
 
 	function sse()
 	{  		
-		var myEventSource = new EventSource("/stream/{{current_user}}/{{other_user}}");
+		var myEventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
 
 		console.log("sse() executing")
 
@@ -33,7 +33,7 @@
 	<ul class = "no-bullet" id="list">
     </ul>
 </div>
-<form method="post" action="/stream/{{current_user}}/{{other_user}}">
+<form method="post" action="/chat/{{current_user}}/{{other_user}}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">
