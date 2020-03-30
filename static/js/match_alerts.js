@@ -7,5 +7,5 @@ function clearUnmatchedRoommates() {
 }
 
 function alertUser() {
-	
+	//This function alerts the user when a match is made.
 }
