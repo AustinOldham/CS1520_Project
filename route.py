@@ -14,12 +14,6 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
-<<<<<<< HEAD
-=======
-#socketio = SocketIO(app)
-
-
->>>>>>> master
 @app.route('/')
 @app.route('/index.html')
 def root():
