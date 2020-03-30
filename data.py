@@ -3,6 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 import hashlib
 import json
+import random
 
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
@@ -16,7 +17,7 @@ MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', bio='', liked_users=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', bio='', liked_users='', avatar=''):
         self.username = username
         self.email = email
         self.about = about
@@ -24,8 +25,11 @@ class User(object):
         self.lastname = lastname
         self.age = age
         self.gender = gender
+        self.state = state
+        self.city = city
         self.bio = bio
         self.liked_users = liked_users
+        self.avatar = avatar
 
     def to_dict(self):
         return {
@@ -37,7 +41,8 @@ class User(object):
             'age': self.age,
             'gender': self.gender,
             'bio': self.bio,
-            'liked_users': self.liked_users
+            'liked_users': self.liked_users,
+            'avatar': self.avatar
         }
 
 
@@ -79,7 +84,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'], liked_users=user['liked_users'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
     return None
 
 
@@ -100,12 +105,12 @@ def load_public_user(username):
 
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     if user:
-        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], bio=user['bio'])
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], avatar=user['avatar'])
     else:
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, about, bio):
+def save_user_profile(username, firstname, lastname, age, gender, city, state, about, bio, avatar):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -114,8 +119,11 @@ def save_user_profile(username, firstname, lastname, age, gender, about, bio):
     user['lastname'] = lastname
     user['age'] = age
     user['gender'] = gender
+    user['state'] = state
+    user['city'] = city
     user['about'] = about
     user['bio'] = bio
+    user['avatar'] = avatar
     client.put(user)
 
 
@@ -169,12 +177,17 @@ def save_liked_users(liked_dict, username):
 def make_match(username):
     """Matches with a random user"""
     client = _get_client()
+    user = _load_entity(client, _USER_ENTITY, username)
+
     q = client.query(kind=_USER_ENTITY)
+    q.add_filter('state', '=', user['state'])
+    q.add_filter('city', '=', user['city'])
+
     liked_dict = get_liked_users(username)
     results = list(q.fetch(100))  # Adds a limit to the maximum number of results
-    for user in results:
-        if (user['username'] not in liked_dict and user['username'] != username):
-            return user['username']
+    for potential_match in results:
+        if (potential_match['username'] not in liked_dict and potential_match['username'] != username):
+            return potential_match['username']
     return ''
 
 
@@ -191,8 +204,11 @@ def save_new_user(user, passwordhash):
     entity['lastname'] = ''
     entity['age'] = ''
     entity['gender'] = ''
+    entity['state'] = ''
+    entity['city'] = ''
     entity['bio'] = ''
     entity['liked_users'] = ''
+    entity['avatar'] = ''
     client.put(entity)
 
 
@@ -205,21 +221,29 @@ def save_about_user(username, about):
     client.put(user)
 
 
-def create_data():
+def create_data(num=50, state='PA', city='Pittsburgh'):
     """You can use this function to populate the datastore with some basic
     data."""
 
-    client = _get_client()
-    entity = datastore.Entity(client.key(_USER_ENTITY, 'testuser'),
-                              exclude_from_indexes=[])
-    entity.update({
-        'username': 'testuser',
-        'passwordhash': '',
-        'email': '',
-        'about': '',
-        # 'completions': [],
-    })
-    client.put(entity)
+    random_id = random.randint(0, 2147483647)
+
+    for i in range(num):
+        client = _get_client()
+        entity = datastore.Entity(_load_key(client, _USER_ENTITY, 'sample_username{}_{}'.format(random_id, i)))
+        entity['username'] = 'sample_username{}_{}'.format(random_id, i)
+        entity['email'] = 'sample_email{}@example.com'.format(i)
+        entity['passwordhash'] = get_password_hash(str(i))
+        entity['about'] = 'Sample about section {}'.format(i)
+        entity['firstname'] = 'First{}'.format(i)
+        entity['lastname'] = 'Last{}'.format(i)
+        entity['age'] = str(i)
+        entity['gender'] = 'gender{}'.format(i)
+        entity['state'] = state
+        entity['city'] = city
+        entity['bio'] = 'Sample bio {}'.format(i)
+        entity['liked_users'] = ''
+        entity['avatar'] = 'mushroom.png'
+        client.put(entity)
 
 
 def get_password_hash(pw):

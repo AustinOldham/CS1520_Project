@@ -14,10 +14,17 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
+<<<<<<< HEAD
+=======
+#socketio = SocketIO(app)
+
+
+>>>>>>> master
 @app.route('/')
 @app.route('/index.html')
 def root():
 	return render_template('index.html', page_title='Home')
+
 
 @app.route('/signup.html')
 def signup():
@@ -65,12 +72,12 @@ def profile_page(username):
 	is_liked = False
 	if username in liked_dict:
 		is_liked = True
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
-@app.route('/profile')
-def profile_list():
-	return render_template('profilelist.html', page_title="Profile List")
+@app.route('/browse')
+def browse():
+	return render_template('browse.html', page_title="Browse")
 
 
 # TODO: Ensure that the username is unique
@@ -105,10 +112,13 @@ def update_profile():
 	lastname = request.form.get('lastname')
 	age = request.form.get('age')
 	gender = request.form.get('gender')
+	state = request.form.get('state')
+	city = request.form.get('city')
 	about = request.form.get('about')
 	bio = request.form.get('bio')
+	avatar = request.form.get('avatar')
 	username = session['user']
-	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, about=about, bio=bio)
+	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, about=about, bio=bio, avatar=avatar)
 	return redirect(url_for('profile_page', username=username))
 
 
@@ -159,7 +169,7 @@ def load_chatroom(user, other):
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		app.logger.info('Message: %s', message)
-		feed.append(message + ' py')
+		feed.append(message)
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
@@ -179,3 +189,13 @@ def stream(user, other):
 def error_page():
 	value = request.args['error_type']
 	return render_template('error.html', page_title="Error", error_message=error_codes[value])
+
+
+@app.route('/addsampleusers/')
+def add_sample_users():
+	num = int(request.args.get('num', '50'))
+	if num is not None and num > 1000:
+		num = 1000  # Caps the maximum number
+	if session['user'] == 'admin':  # Only allow the admin to do this.
+		data.create_data(num=num, state=request.args.get('state', 'PA'), city=request.args.get('city', 'Pittsburgh'))
+	return "success", 200

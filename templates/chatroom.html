@@ -12,7 +12,6 @@
 		myEventSource.onmessage = function(e) {
 			var ul = document.getElementById("list");
 			var li = document.createElement("li");
-			var str = "JS "
   			li.appendChild(document.createTextNode(str.concat(e.data)));
   			ul.appendChild(li);
 			console.log("myEventSource triggered")
