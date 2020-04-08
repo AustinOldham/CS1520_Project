@@ -52,7 +52,7 @@ function getAllMatched() {
 	var elementArray = document.getElementsByClassName("matched");
 	var matchedArray = new Array(elementArray.length);
 	for (var i = 0; i < elementArray.length; i++) {
-		matchedArray[i] = elementArray[0].innerText;
+		matchedArray[i] = elementArray[i].innerText;
 		console.log
 	}
 	return matchedArray;
