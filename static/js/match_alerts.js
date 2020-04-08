@@ -53,7 +53,6 @@ function getAllMatched() {
 	var matchedArray = new Array(elementArray.length);
 	for (var i = 0; i < elementArray.length; i++) {
 		matchedArray[i] = elementArray[i].innerText;
-		console.log
 	}
 	return matchedArray;
 }
@@ -63,7 +62,7 @@ function getAllLiked() {
 	var elementArray = document.getElementsByClassName("liked");
 	var likedArray = new Array(elementArray.length);
 	for (var i = 0; i < elementArray.length; i++) {
-		likedArray[i] = elementArray[0].innerText;
+		likedArray[i] = elementArray[i].innerText;
 	}
 	return likedArray;
 }
