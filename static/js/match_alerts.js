@@ -13,6 +13,20 @@ function saveAlerted() {
 	document.cookie = cookieString;
 }
 
+function loadAlerted() {
+	//Loads the cookie that stores the previously alerted users and returns it as an array.
+	var cookiesList = document.cookie.split(";");
+	var alertedArray = [];
+	for (i = 0; i < cookiesList.length; i++) {
+		if (cookiesList[i].indexOf("previouslyAlerted") === 0) {
+			var alertedString = cookiesList[i].split("=")[1];
+			alertedArray = JSON.parse(alertedString);
+			break;
+		}
+	}
+	return alertedArray;
+}
+
 function alertUser() {
 	//Alerts the user when a match is made.
 	var newMatchedArray = getNewMatched();
@@ -27,7 +41,10 @@ function alertUser() {
 
 function getNewMatched() {
 	//Returns a list of new matches.
-	return getAllMatched();  //Placeholder
+	var matchedArray = getAllMatched();
+	var alertedArray = loadAlerted();
+	var newMatchedArray = matchedArray.filter(n => !alertedArray.includes(n));  //Removes all of the users in alertedArray from matchedArray.
+	return newMatchedArray;
 }
 
 function getAllMatched() {
