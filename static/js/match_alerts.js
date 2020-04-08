@@ -9,6 +9,8 @@ function saveAlerted() {
 	date.setDate(date.getDate() + 30);  //Sets an expiration date 30 days from creation.
 	var dateString = date.toUTCString();
 	cookieString += dateString;
+
+	document.cookie = cookieString;
 }
 
 function alertUser() {
