@@ -1,6 +1,14 @@
 function saveAlerted() {
 	//Stores a cookie that records which matches the user has been alerted about.
-	//TODO: Overwrite the cookie with the current list of matches each time.
+	var matchedArray = getAllMatched();
+	var cookieString = "previouslyAlerted=";
+	cookieString += JSON.stringify(matchedArray);
+
+	cookieString += "; expires=";
+	var date = new Date();
+	date.setDate(date.getDate() + 30);  //Sets an expiration date 30 days from creation.
+	var dateString = date.toUTCString();
+	cookieString += dateString;
 }
 
 function alertUser() {
@@ -26,6 +34,7 @@ function getAllMatched() {
 	var matchedArray = new Array(elementArray.length);
 	for (var i = 0; i < elementArray.length; i++) {
 		matchedArray[i] = elementArray[0].innerText;
+		console.log
 	}
 	return matchedArray;
 }
