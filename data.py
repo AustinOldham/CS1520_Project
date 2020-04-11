@@ -252,7 +252,7 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
         entity['gender'] = 'gender{}'.format(i)
         entity['state'] = state
         entity['city'] = city
-        entity['address'] = str(random.randint(0, 6000)) + 'Forbes Avenue'
+        entity['address'] = str(random.randint(0, 6000)) + ' Forbes Avenue'
         entity['bio'] = 'Sample bio {}'.format(i)
         entity['liked_users'] = ''
         entity['avatar'] = 'mushroom.png'
