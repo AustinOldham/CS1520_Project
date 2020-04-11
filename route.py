@@ -75,8 +75,6 @@ def profile_page(username):
 @app.route('/browse')
 def browse():
     locations = data.get_all_locations()
-    print(locations)
-
     return render_template('browse.html', page_title="Browse", locations=json.dumps(locations))
 
 
