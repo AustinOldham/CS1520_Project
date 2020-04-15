@@ -247,7 +247,7 @@ def unlike_user(username, other_username):
     if (relationship_type == relationship_types['no_relationship']):
         delete_relationship(sorted_usernames[3])
         return
-    elif (relationship_type == relationship_types['{}_likes_{}'.format(username_prefix, other_username_prefix)]):
+    elif (relationship_type == relationship_types['{}_liked_{}'.format(username_prefix, other_username_prefix)]):
         delete_relationship(sorted_usernames[3])
         return
     elif (relationship_type == relationship_types['matched']):
