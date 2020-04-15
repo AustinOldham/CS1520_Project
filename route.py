@@ -16,7 +16,6 @@ error_codes = {
 }
 
 
-# TODO: Replace the home page with news about the website.
 @app.route('/')
 @app.route('/index.html')
 def root():
