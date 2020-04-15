@@ -1,5 +1,15 @@
 {% extends '_base.html' %}
 {% block nav_index %}active{% endblock %}
 {% block content %}
-<h2>This is the home page.</h2>
+<img src="/static/images/squarerush_logo2.svg" width="200" height="200" alt="" style="display: block; margin: 0 auto"}>
+{% if session['user'] %}
+<h2 style="width: 700px; display: block; margin: 31px auto; text-align: center;">Check the <a href="/browse">browse</a> page to view roommates near you.</h2>
+{% else %}
+<h2 style="width: 700px; display: block; margin: 31px auto; text-align: center;">Use Squarerush to find roomates. Meet other people in your area and get in touch.</h2>
+<div style="display: flex; justify-content: center; align-items: center">
+    <a class="nav-link" href="{{ url_for('signup') }}" style="text-align: center; font-size: 40px;">Sign Up</a>
+    <h2 style="font-size: 40px; margin: 0;">or</h2>
+    <a class="nav-link" href="{{ url_for('signin') }}" style="text-align: center; font-size: 40px;">Log In Now</a>
+</div>
+{% endif %}
 {% endblock %}
