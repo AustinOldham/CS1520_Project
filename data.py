@@ -343,7 +343,8 @@ def make_match(username):
     other_user_query.projection = 'username'
 
     other_user_list = []
-    for potential_match in other_user_query.fetch(100):
+    other_user_results = list(other_user_query.fetch(100))
+    for potential_match in other_user_results:
         other_user_list.append(potential_match['username'])
 
     relationship = None
