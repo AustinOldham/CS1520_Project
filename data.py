@@ -12,6 +12,7 @@ import random
 # datastore stuff works
 _PROJECT_ID = 'roommate-tinder'
 _USER_ENTITY = 'roommate_user'
+_RELATIONSHIP_ENTITY = 'roommate_relationship'
 
 MAX_LIKED_TIME = timedelta(days=30)
 
@@ -45,6 +46,14 @@ class User(object):
             'liked_users': self.liked_users,
             'avatar': self.avatar
         }
+
+
+class Relationship(object):
+    def __init__(self, first_username, second_username, relationship_type, expiration_date):
+        self.first_username = first_username
+        self.second_username = second_username
+        self.relationship_type = relationship_type
+        self.expiration_date = expiration_date
 
 
 def _get_client():
