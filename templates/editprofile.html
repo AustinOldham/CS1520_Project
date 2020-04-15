@@ -28,7 +28,7 @@
             <option data-img-src="/static/images/ac3.png" data-img-alt="Animal Crossing 3" value="ac3.png" {% if avatar == 'ac3.png' %} selected="selected"{% endif %}/>
             <option data-img-src="/static/images/pikmin1.png" data-img-alt="Red Pikmin" value="pikmin1.png" {% if avatar == 'pikmin1.png' %} selected="selected"{% endif %}/>
             <option data-img-src="/static/images/pikmin2.png" data-img-alt="Blue Pikmin" value="pikming2.png" {% if avatar == 'pikmin2.png' %} selected="selected"{% endif %}/>
-            <option data-img-src="/static/images/pikmin3.png" data-img-alt="Yellow Pikmin" value="pikming3.png" {% if avatar == 'pikmin3.png' %} selected="selected"{% endif %}/>
+            <option data-img-src="/static/images/pikmin3.png" data-img-alt="Yellow Pikmin" value="pikmin3.png" {% if avatar == 'pikmin3.png' %} selected="selected"{% endif %}/>
             <option data-img-src="/static/images/hat.png" data-img-alt="Hat" value="hat.png" {% if avatar == 'hat.png' %} selected="selected"{% endif %}/>
             <option data-img-src="/static/images/goomba.png" data-img-alt="Goomba" value="goomba.png" {% if avatar == 'goomba.png' %} selected="selected"{% endif %}/>
             <option data-img-src="/static/images/dino.png" data-img-alt="Dino" value="dino.png" {% if avatar == 'dino.png' %} selected="selected"{% endif %}/>
@@ -52,6 +52,14 @@
     <div class="form-group">
         <label for="genderInput">Gender</label>
         <input type="text" name="gender" class="form-control" id="genderInput" value="{{gender_text}}">
+    </div>
+    <div class="form-group">
+        <label for"addressInput">Address</label>
+        <input type="text" name="address" class="form-control" id="addressInput" value="{{address}}">
+    </div>
+    <div class="form-group">
+        <label for="cityInput">City</label>
+        <input type="text" name="city" class="form-control" id="cityInput" value={{city_text}}>
     </div>
     <div class="form-group">
         <label for="stateInput">State</label>
@@ -110,10 +118,6 @@
             <option value="WV" {% if state == 'WV' %} selected="selected" {% endif %}>West Virginia</option>
             <option value="WY" {% if state == 'WY' %} selected="selected" {% endif %}>Wyoming</option>
         </select>
-    </div>
-    <div class="form-group">
-        <label for="cityInput">City</label>
-        <input type="text" name="city" class="form-control" id="cityInput" value={{city_text}}>
     </div>
     <div class="form-group">
         <label for="aboutInput">About</label>

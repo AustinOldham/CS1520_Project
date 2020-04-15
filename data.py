@@ -17,7 +17,7 @@ MAX_LIKED_TIME = timedelta(days=30)
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', bio='', liked_users='', avatar=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', address='', bio='', liked_users='', avatar=''):
         self.username = username
         self.email = email
         self.about = about
@@ -27,6 +27,7 @@ class User(object):
         self.gender = gender
         self.state = state
         self.city = city
+        self.address = address
         self.bio = bio
         self.liked_users = liked_users
         self.avatar = avatar
@@ -84,7 +85,7 @@ def load_user(username, passwordhash):
     q.add_filter('username', '=', username)
     q.add_filter('passwordhash', '=', passwordhash)
     for user in q.fetch():
-        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
+        return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], address=user['address'], bio=user['bio'], liked_users=user['liked_users'], avatar=user['avatar'])
     return None
 
 
@@ -105,12 +106,12 @@ def load_public_user(username):
 
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     if user:
-        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], bio=user['bio'], avatar=user['avatar'])
+        return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], address=user['address'], bio=user['bio'], avatar=user['avatar'])
     else:
         return ''
 
 
-def save_user_profile(username, firstname, lastname, age, gender, city, state, about, bio, avatar):
+def save_user_profile(username, firstname, lastname, age, gender, city, state, address, about, bio, avatar):
     """Save the user profile info to the datastore."""
 
     client = _get_client()
@@ -121,6 +122,7 @@ def save_user_profile(username, firstname, lastname, age, gender, city, state, a
     user['gender'] = gender
     user['state'] = state
     user['city'] = city
+    user['address'] = address
     user['about'] = about
     user['bio'] = bio
     user['avatar'] = avatar
@@ -191,6 +193,15 @@ def make_match(username):
     return ''
 
 
+def get_all_locations():
+    """Lookup all user locations for google maps"""
+    client = _get_client()
+    q = client.query(kind=_USER_ENTITY)
+
+    results = list(q.fetch())
+    return results
+
+
 def save_new_user(user, passwordhash):
     """Save the user details to the datastore."""
 
@@ -206,6 +217,7 @@ def save_new_user(user, passwordhash):
     entity['gender'] = ''
     entity['state'] = ''
     entity['city'] = ''
+    entity['address'] = ''
     entity['bio'] = ''
     entity['liked_users'] = ''
     entity['avatar'] = ''
@@ -240,6 +252,7 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
         entity['gender'] = 'gender{}'.format(i)
         entity['state'] = state
         entity['city'] = city
+        entity['address'] = str(random.randint(0, 6000)) + ' Forbes Avenue'
         entity['bio'] = 'Sample bio {}'.format(i)
         entity['liked_users'] = ''
         entity['avatar'] = 'mushroom.png'

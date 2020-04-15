@@ -41,6 +41,8 @@
       });
 
       function initMap() {
+        const locationList = {{ locations|safe }}
+
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 12,
           center: {lat: 40.4406, lng: -79.9959}
@@ -51,52 +53,30 @@
           geocodeAddress(geocoder, map);
         });
 
-        // Array of markers
-        var markers = [
-          {
-            coords:{lat:40.451390,lng:-79.927820},
-            content:'<h3>919 Maryland Ave Pittsburgh, PA, 15232</br>Rent: $550</h3>'
-          },
-          {
-            coords:{lat:40.457880,lng:-79.961110},
-            content:'<h3>3435 Bigelow Blvd Pittsburgh, PA, 15213 </br>Rent: $675</h3>'
-          },
-          {
-            coords:{lat:40.419610,lng:-80.006880},
-            content:'<h3>95 Industry St Pittsburgh, PA, 15210</br>Rent: $700</h3>'
-          }
-        ];
+        locationList.forEach(item => {
+          const location = item.address + ' ' + item.city + ' ' + item.state;
+          setMarker(location)
+        });
 
-        // Loop through markers
-        for(var i = 0;i < markers.length;i++){
-          // Add marker
-          addMarker(markers[i]);
-        }
+        // Add all markers based on users
+        function setMarker(address) {
+          let marker;
+          geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+              marker = new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location
+              });
+              var infoWindow = new google.maps.InfoWindow({
+                content: '<div>' + address + '</div>'
+              });
 
-        // Add Marker Function
-        function addMarker(props){
-          var marker = new google.maps.Marker({
-            position:props.coords,
-            map:map,
-            //icon:props.iconImage
+              marker.addListener('click', function(){
+                  infoWindow.open(map, marker);
+              });
+            }
           });
-
-          // Check for customicon
-          if(props.iconImage){
-            // Set icon image
-            marker.setIcon(props.iconImage);
-          }
-
-          // Check content
-          if(props.content){
-            var infoWindow = new google.maps.InfoWindow({
-              content:props.content
-            });
-
-            marker.addListener('click', function(){
-              infoWindow.open(map, marker);
-            });
-          }
+          
         }
       }
 

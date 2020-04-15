@@ -3,6 +3,7 @@ from email.utils import parseaddr
 from main import app
 import datetime
 import data
+import json
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
@@ -34,7 +35,7 @@ def signin():
 def editprofile():
     username = session['user']
     user = data.load_public_user(username)
-    return render_template('editprofile.html', page_title='Edit Profile', first_name=user.firstname, last_name=user.lastname, gender_text=user.gender, age_text=user.age, state=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, avatar=user.avatar)
+    return render_template('editprofile.html', page_title='Edit Profile', first_name=user.firstname, last_name=user.lastname, gender_text=user.gender, age_text=user.age, state=user.state, city_text=user.city, address=user.address, about_text=user.about, bio_text=user.bio, avatar=user.avatar)
 
 
 @app.route('/signin_user', methods=['POST'])
@@ -68,12 +69,13 @@ def profile_page(username):
 	is_liked = False
 	if username in liked_dict:
 		is_liked = True
-	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
+	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, address=user.address, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
 @app.route('/browse')
 def browse():
-	return render_template('browse.html', page_title="Browse")
+    locations = data.get_all_locations()
+    return render_template('browse.html', page_title="Browse", locations=json.dumps(locations))
 
 
 # TODO: Ensure that the username is unique
@@ -104,18 +106,19 @@ def register_user():
 # TODO: Fill in each text area with what the user already has so the information is not wiped each time.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
-	firstname = request.form.get('firstname')
-	lastname = request.form.get('lastname')
-	age = request.form.get('age')
-	gender = request.form.get('gender')
-	state = request.form.get('state')
-	city = request.form.get('city')
-	about = request.form.get('about')
-	bio = request.form.get('bio')
-	avatar = request.form.get('avatar')
-	username = session['user']
-	data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, about=about, bio=bio, avatar=avatar)
-	return redirect(url_for('profile_page', username=username))
+    firstname = request.form.get('firstname')
+    lastname = request.form.get('lastname')
+    age = request.form.get('age')
+    gender = request.form.get('gender')
+    state = request.form.get('state')
+    city = request.form.get('city')
+    address = request.form.get('address')
+    about = request.form.get('about')
+    bio = request.form.get('bio')
+    avatar = request.form.get('avatar')
+    username = session['user']
+    data.save_user_profile(username=username, firstname=firstname, lastname=lastname, age=age, gender=gender, state=state, city=city, address=address, about=about, bio=bio, avatar=avatar)
+    return redirect(url_for('profile_page', username=username))
 
 
 @app.route('/likeuser/<other_username>')
