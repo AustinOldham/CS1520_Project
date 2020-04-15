@@ -2,7 +2,6 @@ from google.cloud import datastore
 from datetime import datetime, timezone, timedelta
 
 import hashlib
-import json
 import random
 
 
@@ -24,8 +23,8 @@ relationship_types = {
     "first_ignored_second": 3,
     "second_ignored_first": 4,
     "both_ignored": 5,
-    "first_liked_second_ignored": 6,
-    "first_ignored_second_liked": 7,
+    "first_liked_second_ignored": 6,  # First likes the second user but second is ignoring the first user.
+    "second_liked_first_ignored": 7,
     "matched": 8
 }
 
@@ -215,6 +214,8 @@ def like_user(username, other_username):
     elif (relationship_type == relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]):
         relationship['relationship_type'] = relationship_types['matched']
 
+    relationship['relationship_date'] = get_date_string(get_current_date())
+
     save_relationship(relationship)
 
 
@@ -253,47 +254,118 @@ def unlike_user(username, other_username):
     elif (relationship_type == relationship_types['matched']):
         relationship['relationship_type'] = relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]
 
+    relationship['relationship_date'] = get_date_string(get_current_date())
+
     save_relationship(relationship)
 
 
-
-# If the json conversion is too slow, use ujson
 def get_liked_users(username):
-    user = _load_entity(_get_client(), _USER_ENTITY, username)
-    liked_dict = json.loads(user['liked_users'] or '{}')  # Converts the json string to a dictionary.
-    return liked_dict
+    client = _get_client()
+
+    first_query = client.query(kind=_RELATIONSHIP_ENTITY)
+    first_query.add_filter('relationship_type', '=', relationship_types['first_likes_second'])
+    first_query.add_filter('first_username', '=', username)
+    first_query.projection = ['second_username']
+
+    first_list = []
+    for relationship in first_query.fetch(20):
+        first_list.append(relationship['second_username'])
+
+    second_query = client.query(kind=_RELATIONSHIP_ENTITY)
+    second_query.add_filter('relationship_type', '=', relationship_types['second_likes_first'])
+    second_query.add_filter('second_username', '=', username)
+    second_query.projection = ['first_username']
+
+    second_list = []
+    for relationship in second_query.fetch(20):
+        second_list.append(relationship['first_username'])
+
+    liked_list = first_list + second_list
+    return liked_list
 
 
+def get_matched_users(username):
+    client = _get_client()
+
+    first_query = client.query(kind=_RELATIONSHIP_ENTITY)
+    first_query.add_filter('relationship_type', '=', relationship_types['matched'])
+    first_query.add_filter('first_username', '=', username)
+    first_query.projection = ['second_username']
+
+    first_list = []
+    for relationship in first_query.fetch(100):
+        first_list.append(relationship['second_username'])
+
+    second_query = client.query(kind=_RELATIONSHIP_ENTITY)
+    second_query.add_filter('relationship_type', '=', relationship_types['matched'])
+    second_query.add_filter('second_username', '=', username)
+    second_query.projection = ['first_username']
+
+    second_list = []
+    for relationship in second_query.fetch(100):
+        second_list.append(relationship['first_username'])
+
+    matched_list = first_list + second_list
+    return matched_list
+
+
+"""
 def save_liked_users(liked_dict, username):
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
     user['liked_users'] = json.dumps(liked_dict)  # Converts the dictionary to a string since Datastore does not support dictionaries.
     client.put(user)
+"""
 
 
 def make_match(username):
-    """Matches with a random user"""
+    """Matches with a random user in the same city and state."""
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
 
-    q = client.query(kind=_USER_ENTITY)
-    q.add_filter('state', '=', user['state'])
-    q.add_filter('city', '=', user['city'])
+    other_user_query = client.query(kind=_USER_ENTITY)
+    other_user_query.add_filter('state', '=', user['state'])
+    other_user_query.add_filter('city', '=', user['city'])
+    other_user_query.projection = ['username']
 
-    liked_dict = get_liked_users(username)
-    results = list(q.fetch(100))  # Adds a limit to the maximum number of results
-    for potential_match in results:
-        if (potential_match['username'] not in liked_dict and potential_match['username'] != username):
-            return potential_match['username']
+    other_user_list = []
+    for potential_match in other_user_query.fetch(100):
+        other_user_list.append(potential_match['username'])
+
+    relationship = None
+    for other_username in other_user_list:
+        sorted_usernames = sort_users(username, other_username)
+        relationship = get_relationship(sorted_usernames)
+
+        username_prefix = 'first'
+        other_username_prefix = 'second'
+        if (sorted_usernames[2] == 1):  # Checks which order the usernames are in.
+            username_prefix = 'second'
+            other_username_prefix = 'first'
+
+        if relationship is None:
+            relationship = create_relationship(sorted_usernames)
+            relationship['relationship_type'] = relationship_types['{}_ignored_{}'.format(username_prefix, other_username_prefix)]  # Sets the status to ignored so the user is not shown next time.
+        elif (relationship['relationship_type'] == relationship_types['no_relationship']):
+            relationship['relationship_type'] = relationship_types['{}_ignored_{}'.format(username_prefix, other_username_prefix)]  # Sets the status to ignored so the user is not shown next time.
+        elif (relationship['relationship_type'] == relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]):
+            relationship['relationship_type'] = relationship_types['{}_liked_{}_ignored'.format(other_username_prefix, username_prefix)]  # Sets the status to ignored so the user is not shown next time.
+        else:
+            continue
+
+        relationship['relationship_date'] = get_date_string(get_current_date())
+
+        save_relationship(relationship)
+        return other_username
     return ''
 
 
 def get_all_locations():
     """Lookup all user locations for google maps"""
     client = _get_client()
-    q = client.query(kind=_USER_ENTITY)
+    query = client.query(kind=_USER_ENTITY)
 
-    results = list(q.fetch())
+    results = list(query.fetch())
     return results
 
 
