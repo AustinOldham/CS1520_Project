@@ -263,7 +263,7 @@ def get_liked_users(username):
     client = _get_client()
 
     first_query = client.query(kind=_RELATIONSHIP_ENTITY)
-    first_query.add_filter('relationship_type', '=', relationship_types['first_likes_second'])
+    first_query.add_filter('relationship_type', '=', relationship_types['first_liked_second'])
     first_query.add_filter('first_username', '=', username)
     first_query.projection = ['second_username']
 
@@ -272,7 +272,7 @@ def get_liked_users(username):
         first_list.append(relationship['second_username'])
 
     second_query = client.query(kind=_RELATIONSHIP_ENTITY)
-    second_query.add_filter('relationship_type', '=', relationship_types['second_likes_first'])
+    second_query.add_filter('relationship_type', '=', relationship_types['second_liked_first'])
     second_query.add_filter('second_username', '=', username)
     second_query.projection = ['first_username']
 
