@@ -340,12 +340,21 @@ def make_match(username):
     other_user_query = client.query(kind=_USER_ENTITY)
     other_user_query.add_filter('city', '=', user['city'])
     other_user_query.add_filter('state', '=', user['state'])
-    other_user_query.projection = 'username'
+    other_user_results = list(other_user_query.fetch(100))
 
     other_user_list = []
-    other_user_results = list(other_user_query.fetch(100))
     for potential_match in other_user_results:
         other_user_list.append(potential_match['username'])
+
+    """
+    # This resulted in an error.
+    other_user_query.projection = ['username']
+
+    other_user_list = []
+    for potential_match in other_user_query.fetch(100):
+        other_user_list.append(potential_match['username'])
+    """
+
 
     relationship = None
     for other_username in other_user_list:
