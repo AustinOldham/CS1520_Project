@@ -181,7 +181,6 @@ def is_liked(username, other_username):
         return False
 
 
-
 def is_like_expired(old_date_string):
     """Checks how long ago the like was made"""
     old_date = datetime.strptime(old_date_string, "%Y-%m-%d %H:%M:%S")
@@ -333,23 +332,14 @@ def get_matched_users(username):
     return matched_list
 
 
-"""
-def save_liked_users(liked_dict, username):
-    client = _get_client()
-    user = _load_entity(client, _USER_ENTITY, username)
-    user['liked_users'] = json.dumps(liked_dict)  # Converts the dictionary to a string since Datastore does not support dictionaries.
-    client.put(user)
-"""
-
-
 def make_match(username):
     """Matches with a random user in the same city and state."""
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
 
     other_user_query = client.query(kind=_USER_ENTITY)
-    other_user_query.add_filter('state', '=', user['state'])
     other_user_query.add_filter('city', '=', user['city'])
+    other_user_query.add_filter('state', '=', user['state'])
     other_user_query.projection = ['username']
 
     other_user_list = []
