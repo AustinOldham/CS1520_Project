@@ -17,6 +17,19 @@ _RELATIONSHIP_ENTITY = 'roommate_relationship'
 MAX_LIKED_TIME = timedelta(days=30)
 
 
+relationship_types = {
+    "no_relationship": 0,
+    "first_liked_second": 1,
+    "second_liked_first": 2,
+    "matched": 3,
+    "first_ignored_second": 4,
+    "second_ignored_first": 5,
+    "both_ignored": 6,
+    "first_liked_second_ignored": 7,
+    "first_ignored_second_liked": 8
+}
+
+
 class User(object):
     def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', address='', bio='', liked_users='', avatar=''):
         self.username = username
@@ -49,11 +62,11 @@ class User(object):
 
 
 class Relationship(object):
-    def __init__(self, first_username, second_username, relationship_type, expiration_date):
+    def __init__(self, first_username, second_username, relationship_type, relationship_date):
         self.first_username = first_username
         self.second_username = second_username
         self.relationship_type = relationship_type
-        self.expiration_date = expiration_date
+        self.relationship_date = relationship_date
 
 
 def _get_client():
@@ -138,31 +151,76 @@ def save_user_profile(username, firstname, lastname, age, gender, city, state, a
     client.put(user)
 
 
-#def test_add_liked_users(username):
-#    client = _get_client()
-#    entity = datastore.Entity(_load_key(client, _USER_ENTITY, username))
-#    entity['liked_users'] = ["test1", "test2", "test3"]
-#    client.put(entity)
+def get_current_date():
+    return datetime.now(timezone.utc)
 
 
-#def test_return_liked_users(username):
-#    user = _load_entity(_get_client(), _USER_ENTITY, username)
-#    liked = user['liked_users']
-#    return (liked[2] + liked[1] + liked[0])
+def get_date_string(date):
+    return date.isoformat(' ', 'seconds')
+
 
 def is_like_expired(old_date_string):
     """Checks how long ago the like was made"""
     old_date = datetime.strptime(old_date_string, "%Y-%m-%d %H:%M:%S")
-    current_date = datetime.now(timezone.utc)
+    current_date = get_current_date()
     difference = current_date - old_date
     return difference > MAX_LIKED_TIME
 
 
+def sort_users(username, other_username):
+    """Returns a tuple with the usernames in order and the index of the current user."""
+    if (username < other_username):
+        user_tuple = username, other_username, 0, ('{} {}'.format(username, other_username))
+        return user_tuple
+    else:
+        user_tuple = other_username, username, 1, ('{} {}'.format(other_username, username))
+        return user_tuple
+
+
+def get_relationship(sorted_usernames):
+    relationship_id = sorted_usernames[3]
+    client = _get_client()
+    relationship = _load_entity(client, _RELATIONSHIP_ENTITY, relationship_id)
+    return relationship
+
+
+def create_relationship(sorted_usernames):
+    relationship_id = sorted_usernames[3]
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _RELATIONSHIP_ENTITY, relationship_id))
+    entity['first_username'] = sorted_usernames[0]
+    entity['second_username'] = sorted_usernames[1]
+    entity['relationship_type'] = relationship_types["no_relationship"]
+    entity['relationship_date'] = get_date_string(get_current_date())
+    return entity
+
+
 def like_user(username, other_username):
-    current_time = datetime.now(timezone.utc)  # Uses UTC for consistency.
-    liked_dict = get_liked_users(username)
-    liked_dict[other_username] = current_time.isoformat(' ', 'seconds')  # Stores the time that the like was performed in order to allow the program to remove old entries.
-    save_liked_users(liked_dict, username)
+    sorted_usernames = sort_users(username, other_username)
+    relationship = get_relationship(sorted_usernames)
+
+    if relationship is None:
+        relationship = create_relationship(sorted_usernames)
+
+    relationship_type = relationship['relationship_type']
+
+    username_prefix = 'first'
+    other_username_prefix = 'second'
+    if (sorted_usernames[2] == 1):
+        username_prefix = 'second'
+        other_username_prefix = 'first'
+
+    if (relationship_type == relationship_types['no_relationship']):
+        relationship['relationship_type'] = relationship_types['{}_liked_{}'.format(username_prefix, other_username_prefix)]
+    elif (relationship_type == relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]):
+        relationship['relationship_type'] = relationship_types['matched']
+
+    save_relationship(relationship)
+
+
+def save_relationship(relationship):
+    client = _get_client()
+    client.put(relationship)
 
 
 def unlike_user(username, other_username):

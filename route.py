@@ -15,6 +15,8 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
+
+# TODO: Replace the home page with news about the website.
 @app.route('/')
 @app.route('/index.html')
 def root():
@@ -78,7 +80,8 @@ def browse():
     return render_template('browse.html', page_title="Browse", locations=json.dumps(locations))
 
 
-# TODO: Ensure that the username is unique
+# TODO: Ensure that the username is unique and does not contain spaces
+# TODO: Replace "errors.append" with a redirect to the error page.
 @app.route('/register', methods=['POST'])
 def register_user():
 	username = request.form.get('username')
