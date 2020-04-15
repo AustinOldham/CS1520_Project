@@ -236,6 +236,14 @@ def like_user(username, other_username):
         relationship['relationship_type'] = relationship_types['{}_liked_{}'.format(username_prefix, other_username_prefix)]
     elif (relationship_type == relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]):
         relationship['relationship_type'] = relationship_types['matched']
+    elif (relationship_type == relationship_types['{}_ignored_{}'.format(other_username_prefix, username_prefix)]):
+        relationship['relationship_type'] = relationship_types['{}_liked_{}_ignored'.format(username_prefix, other_username_prefix)]
+    elif (relationship_type == relationship_types['{}_ignored_{}'.format(username_prefix, other_username_prefix)]):
+        relationship['relationship_type'] = relationship_types['{}_liked_{}'.format(username_prefix, other_username_prefix)]
+    elif (relationship_type == relationship_types['both_ignored']):
+        relationship['relationship_type'] = relationship_types['{}_liked_{}_ignored'.format(username_prefix, other_username_prefix)]
+    elif (relationship_type == relationship_types['{}_liked_{}_ignored'.format(other_username_prefix, username_prefix)]):
+        relationship['relationship_type'] = relationship_types['matched']
 
     relationship['relationship_date'] = get_date_string(get_current_date())
 
@@ -354,7 +362,6 @@ def make_match(username):
     for potential_match in other_user_query.fetch(100):
         other_user_list.append(potential_match['username'])
     """
-
 
     relationship = None
     for other_username in other_user_list:
