@@ -168,7 +168,7 @@ def is_like_expired(old_date_string):
 
 
 def sort_users(username, other_username):
-    """Returns a tuple with the usernames in order and the index of the current user."""
+    """Returns a tuple with the usernames in order, the index of the current user, and the ID of the relationship."""
     if (username < other_username):
         user_tuple = username, other_username, 0, ('{} {}'.format(username, other_username))
         return user_tuple
@@ -206,7 +206,7 @@ def like_user(username, other_username):
 
     username_prefix = 'first'
     other_username_prefix = 'second'
-    if (sorted_usernames[2] == 1):
+    if (sorted_usernames[2] == 1):  # Checks which order the usernames are in.
         username_prefix = 'second'
         other_username_prefix = 'first'
 
@@ -223,10 +223,38 @@ def save_relationship(relationship):
     client.put(relationship)
 
 
+def delete_relationship(relationship_id):
+    client = _get_client()
+    key = _load_key(client, _RELATIONSHIP_ENTITY, relationship_id)
+    client.delete(key)
+
+
 def unlike_user(username, other_username):
-    liked_dict = get_liked_users(username)
-    del liked_dict[other_username]
-    save_liked_users(liked_dict, username)
+    sorted_usernames = sort_users(username, other_username)
+    relationship = get_relationship(sorted_usernames)
+
+    if relationship is None:
+        return
+
+    relationship_type = relationship['relationship_type']
+
+    username_prefix = 'first'
+    other_username_prefix = 'second'
+    if (sorted_usernames[2] == 1):  # Checks which order the usernames are in.
+        username_prefix = 'second'
+        other_username_prefix = 'first'
+
+    if (relationship_type == relationship_types['no_relationship']):
+        delete_relationship(sorted_usernames[3])
+        return
+    elif (relationship_type == relationship_types['{}_likes_{}'.format(username_prefix, other_username_prefix)]):
+        delete_relationship(sorted_usernames[3])
+        return
+    elif (relationship_type == relationship_types['matched']):
+        relationship['relationship_type'] = relationship_types['{}_liked_{}'.format(other_username_prefix, username_prefix)]
+
+    save_relationship(relationship)
+
 
 
 # If the json conversion is too slow, use ujson
