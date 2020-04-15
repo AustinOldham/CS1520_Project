@@ -15,6 +15,7 @@ error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
 }
 
+
 @app.route('/')
 @app.route('/index.html')
 def root():
@@ -65,10 +66,7 @@ def profile_page(username):
 	is_owner = False  # Checks if the user is looking at his own profile
 	if current_user == user.username:
 		is_owner = True
-	liked_dict = data.get_liked_users(current_user)
-	is_liked = False
-	if username in liked_dict:
-		is_liked = True
+	is_liked = data.is_liked(current_user, username)
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, address=user.address, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 
@@ -78,7 +76,8 @@ def browse():
     return render_template('browse.html', page_title="Browse", locations=json.dumps(locations))
 
 
-# TODO: Ensure that the username is unique
+# TODO: Ensure that the username is unique and does not contain spaces
+# TODO: Replace "errors.append" with a redirect to the error page.
 @app.route('/register', methods=['POST'])
 def register_user():
 	username = request.form.get('username')
@@ -147,14 +146,16 @@ def find_match():
 @app.route('/matches')
 def match_list():
 	username = session['user']
-	liked_users = data.get_liked_users(username)
-	matched_usernames = []
-	waiting_usernames = []
+	# liked_users = data.get_liked_users(username)
+	matched_usernames = data.get_matched_users(username)
+	waiting_usernames = data.get_liked_users(username)
+	"""
 	for user in liked_users.keys():
 		if username in data.get_liked_users(user).keys():
 			matched_usernames.append(user)
 		else:
 			waiting_usernames.append(user)
+	"""
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
 
