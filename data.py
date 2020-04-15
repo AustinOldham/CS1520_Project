@@ -340,7 +340,7 @@ def make_match(username):
     other_user_query = client.query(kind=_USER_ENTITY)
     other_user_query.add_filter('city', '=', user['city'])
     other_user_query.add_filter('state', '=', user['state'])
-    other_user_query.projection = ['username']
+    other_user_query.projection = 'username'
 
     other_user_list = []
     for potential_match in other_user_query.fetch(100):
