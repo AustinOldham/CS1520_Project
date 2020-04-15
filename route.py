@@ -67,10 +67,7 @@ def profile_page(username):
 	is_owner = False  # Checks if the user is looking at his own profile
 	if current_user == user.username:
 		is_owner = True
-	liked_dict = data.get_liked_users(current_user)
-	is_liked = False
-	if username in liked_dict:
-		is_liked = True
+	is_liked = data.is_liked(current_user, username)
 	return render_template('profile.html', page_title=username, name_text=("{} {}".format(user.firstname, user.lastname)), gender_text=user.gender, age_text=str(user.age), state_text=user.state, city_text=user.city, address=user.address, about_text=user.about, bio_text=user.bio, other_username=user.username, is_owner=is_owner, is_liked=is_liked, avatar=user.avatar)
 
 

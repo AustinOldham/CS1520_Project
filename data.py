@@ -158,6 +158,30 @@ def get_date_string(date):
     return date.isoformat(' ', 'seconds')
 
 
+def is_liked(username, other_username):
+    """Checks if the current user likes other_username."""
+    sorted_usernames = sort_users(username, other_username)
+    relationship = get_relationship(sorted_usernames)
+
+    username_prefix = 'first'
+    other_username_prefix = 'second'
+    if (sorted_usernames[2] == 1):  # Checks which order the usernames are in.
+        username_prefix = 'second'
+        other_username_prefix = 'first'
+
+    if relationship is None:
+        return False
+    elif (relationship['relationship_type'] == relationship_types['matched']):
+        return True
+    elif (relationship['relationship_type'] == relationship_types['{}_liked_{}'.format(username_prefix, other_username_prefix)]):
+        return True
+    elif (relationship['relationship_type'] == relationship_types['{}_liked_{}_ignored'.format(username_prefix, other_username_prefix)]):
+        return True
+    else:
+        return False
+
+
+
 def is_like_expired(old_date_string):
     """Checks how long ago the like was made"""
     old_date = datetime.strptime(old_date_string, "%Y-%m-%d %H:%M:%S")
