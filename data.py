@@ -365,6 +365,8 @@ def make_match(username):
 
     relationship = None
     for other_username in other_user_list:
+        if (other_username == username):  # Skips if the current user was selected.
+            continue
         sorted_usernames = sort_users(username, other_username)
         relationship = get_relationship(sorted_usernames)
 
