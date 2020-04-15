@@ -21,12 +21,12 @@ relationship_types = {
     "no_relationship": 0,
     "first_liked_second": 1,
     "second_liked_first": 2,
-    "matched": 3,
-    "first_ignored_second": 4,
-    "second_ignored_first": 5,
-    "both_ignored": 6,
-    "first_liked_second_ignored": 7,
-    "first_ignored_second_liked": 8
+    "first_ignored_second": 3,
+    "second_ignored_first": 4,
+    "both_ignored": 5,
+    "first_liked_second_ignored": 6,
+    "first_ignored_second_liked": 7,
+    "matched": 8
 }
 
 
