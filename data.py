@@ -296,20 +296,36 @@ def get_liked_users(username):
     first_query = client.query(kind=_RELATIONSHIP_ENTITY)
     first_query.add_filter('relationship_type', '=', relationship_types['first_liked_second'])
     first_query.add_filter('first_username', '=', username)
+    first_query_results = list(first_query.fetch(100))
+
+    first_list = []
+    for relationship in first_query_results:
+        first_list.append(relationship['second_username'])
+
+    """
     first_query.projection = ['second_username']
 
     first_list = []
     for relationship in first_query.fetch(20):
         first_list.append(relationship['second_username'])
+    """
 
     second_query = client.query(kind=_RELATIONSHIP_ENTITY)
     second_query.add_filter('relationship_type', '=', relationship_types['second_liked_first'])
     second_query.add_filter('second_username', '=', username)
+    second_query_results = list(second_query.fetch(100))
+
+    second_list = []
+    for relationship in second_query_results:
+        second_list.append(relationship['first_username'])
+
+    """
     second_query.projection = ['first_username']
 
     second_list = []
     for relationship in second_query.fetch(20):
         second_list.append(relationship['first_username'])
+    """
 
     liked_list = first_list + second_list
     return liked_list
@@ -321,20 +337,36 @@ def get_matched_users(username):
     first_query = client.query(kind=_RELATIONSHIP_ENTITY)
     first_query.add_filter('relationship_type', '=', relationship_types['matched'])
     first_query.add_filter('first_username', '=', username)
+    first_query_results = list(first_query.fetch(100))
+
+    first_list = []
+    for relationship in first_query_results:
+        first_list.append(relationship['second_username'])
+
+    """
     first_query.projection = ['second_username']
 
     first_list = []
     for relationship in first_query.fetch(100):
         first_list.append(relationship['second_username'])
+    """
 
     second_query = client.query(kind=_RELATIONSHIP_ENTITY)
     second_query.add_filter('relationship_type', '=', relationship_types['matched'])
     second_query.add_filter('second_username', '=', username)
+    second_query_results = list(second_query.fetch(100))
+
+    second_list = []
+    for relationship in second_query_results:
+        second_list.append(relationship['first_username'])
+
+    """
     second_query.projection = ['first_username']
 
     second_list = []
     for relationship in second_query.fetch(100):
         second_list.append(relationship['first_username'])
+    """
 
     matched_list = first_list + second_list
     return matched_list
