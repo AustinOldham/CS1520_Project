@@ -146,26 +146,15 @@ def find_match():
 @app.route('/matches')
 def match_list():
     username = session['user']
-    # liked_users = data.get_liked_users(username)
     matched_usernames = data.get_matched_users(username)
     waiting_usernames = data.get_liked_users(username)
-    """
-    for user in liked_users.keys():
-        if username in data.get_liked_users(user).keys():
-            matched_usernames.append(user)
-        else:
-            waiting_usernames.append(user)
-    """
     return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, num_matches=len(matched_usernames), waiting=waiting_usernames, page_index=0)
 
 
-
-@app.route('/chat/<user>/<other>', methods=['GET','POST'])
+@app.route('/chat/<user>/<other>', methods=['GET', 'POST'])
 def load_chatroom(user, other):
-
     username = session['user']
     if request.method == 'POST':
-
         now = datetime.datetime.now().replace(microsecond=0).time()
         message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
         app.logger.info('Message: %s', message)
@@ -173,7 +162,8 @@ def load_chatroom(user, other):
 
     return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
-@app.route('/stream/<user>/<other>', methods=['GET','POST'])
+
+@app.route('/stream/<user>/<other>', methods=['GET', 'POST'])
 def stream(user, other):
 
     def pushData(message):
@@ -183,7 +173,8 @@ def stream(user, other):
         now = datetime.datetime.now().replace(microsecond=0).time()
         message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
         return Response(pushData(message), mimetype="text/event-stream")
-    return redirect('/chat/'+user+'/'+other)
+    return redirect('/chat/' + user + '/' + other)
+
 
 @app.route('/error')
 def error_page():
