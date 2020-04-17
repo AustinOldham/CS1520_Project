@@ -7,8 +7,6 @@ import random
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
-# Everyone will likely have a different project ID. Put yours here so the
-# datastore stuff works
 _PROJECT_ID = 'squarerush'
 _USER_ENTITY = 'roommate_user'
 _RELATIONSHIP_ENTITY = 'roommate_relationship'
