@@ -76,7 +76,7 @@ def browse():
     return render_template('browse.html', page_title="Browse", locations=json.dumps(locations))
 
 
-# TODO: Ensure that the username is unique and does not contain spaces
+# TODO: Ensure that the username is unique and does not contain spaces or special characters.
 # TODO: Replace "errors.append" with a redirect to the error page.
 @app.route('/register', methods=['POST'])
 def register_user():
@@ -102,7 +102,6 @@ def register_user():
 
 
 # TODO: Redirect to the signup page if the user is not signed in.
-# TODO: Fill in each text area with what the user already has so the information is not wiped each time.
 @app.route('/updateprofile', methods=['POST'])
 def update_profile():
     firstname = request.form.get('firstname')
