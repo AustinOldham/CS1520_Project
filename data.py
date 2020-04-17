@@ -30,7 +30,7 @@ relationship_types = {
 
 
 class User(object):
-    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', address='', bio='', liked_users='', avatar=''):
+    def __init__(self, username, email='', about='', firstname='', lastname='', age='', gender='', state='', city='', address='', bio='', avatar=''):
         self.username = username
         self.email = email
         self.about = about
@@ -42,7 +42,6 @@ class User(object):
         self.city = city
         self.address = address
         self.bio = bio
-        self.liked_users = liked_users
         self.avatar = avatar
 
     def to_dict(self):
@@ -55,7 +54,6 @@ class User(object):
             'age': self.age,
             'gender': self.gender,
             'bio': self.bio,
-            'liked_users': self.liked_users,
             'avatar': self.avatar
         }
 
@@ -451,7 +449,6 @@ def save_new_user(user, passwordhash):
     entity['city'] = ''
     entity['address'] = ''
     entity['bio'] = ''
-    entity['liked_users'] = ''
     entity['avatar'] = ''
     client.put(entity)
 
@@ -486,7 +483,6 @@ def create_data(num=50, state='PA', city='Pittsburgh'):
         entity['city'] = city
         entity['address'] = str(random.randint(0, 6000)) + ' Forbes Avenue'
         entity['bio'] = 'Sample bio {}'.format(i)
-        entity['liked_users'] = ''
         entity['avatar'] = 'mushroom.png'
         client.put(entity)
 
