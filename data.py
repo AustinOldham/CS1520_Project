@@ -68,7 +68,6 @@ class Relationship(object):
 
 def _get_client():
     """Returns the datastore client"""
-
     return datastore.Client(_PROJECT_ID)
 
 
@@ -76,7 +75,6 @@ def _load_key(client, entity_type, entity_id=None, parent_key=None):
     """Load a datastore key using a particular client, and if known, the ID.  Note
     that the ID should be an int - we're allowing datastore to generate them in
     this example."""
-
     key = None
     if entity_id:
         key = client.key(entity_type, entity_id, parent=parent_key)
@@ -88,17 +86,15 @@ def _load_key(client, entity_type, entity_id=None, parent_key=None):
 
 def _load_entity(client, entity_type, entity_id, parent_key=None):
     """Load a datstore entity using a particular client, and the ID."""
-
     key = _load_key(client, entity_type, entity_id, parent_key)
     entity = client.get(key)
-    # log('retrieved entity for ' + str(entity_id))
     return entity
 
 
+# TODO: Change this to load the user in the same way a relationship is loaded.
 def load_user(username, passwordhash):
     """Load a user based on the passwordhash; if the passwordhash doesn't match
     the username, then this should return None."""
-
     client = _get_client()
     q = client.query(kind=_USER_ENTITY)
     q.add_filter('username', '=', username)
@@ -108,21 +104,8 @@ def load_user(username, passwordhash):
     return None
 
 
-# Note: This may be removed in the future
-def load_about_user(username):
-    """Return a string that represents the "About Me" information a user has
-    stored."""
-
-    user = _load_entity(_get_client(), _USER_ENTITY, username)
-    if user:
-        return user['about']
-    else:
-        return ''
-
-
 def load_public_user(username):
     """Returns a user object that contains information that anyone can view."""
-
     user = _load_entity(_get_client(), _USER_ENTITY, username)
     if user:
         return User(username=user['username'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], address=user['address'], bio=user['bio'], avatar=user['avatar'])
@@ -132,7 +115,6 @@ def load_public_user(username):
 
 def save_user_profile(username, firstname, lastname, age, gender, city, state, address, about, bio, avatar):
     """Save the user profile info to the datastore."""
-
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
     user['firstname'] = firstname
@@ -300,14 +282,6 @@ def get_liked_users(username):
     for relationship in first_query_results:
         first_list.append(relationship['second_username'])
 
-    """
-    first_query.projection = ['second_username']
-
-    first_list = []
-    for relationship in first_query.fetch(20):
-        first_list.append(relationship['second_username'])
-    """
-
     second_query = client.query(kind=_RELATIONSHIP_ENTITY)
     second_query.add_filter('relationship_type', '=', relationship_types['second_liked_first'])
     second_query.add_filter('second_username', '=', username)
@@ -316,14 +290,6 @@ def get_liked_users(username):
     second_list = []
     for relationship in second_query_results:
         second_list.append(relationship['first_username'])
-
-    """
-    second_query.projection = ['first_username']
-
-    second_list = []
-    for relationship in second_query.fetch(20):
-        second_list.append(relationship['first_username'])
-    """
 
     liked_list = first_list + second_list
     return liked_list
@@ -341,14 +307,6 @@ def get_matched_users(username):
     for relationship in first_query_results:
         first_list.append(relationship['second_username'])
 
-    """
-    first_query.projection = ['second_username']
-
-    first_list = []
-    for relationship in first_query.fetch(100):
-        first_list.append(relationship['second_username'])
-    """
-
     second_query = client.query(kind=_RELATIONSHIP_ENTITY)
     second_query.add_filter('relationship_type', '=', relationship_types['matched'])
     second_query.add_filter('second_username', '=', username)
@@ -357,14 +315,6 @@ def get_matched_users(username):
     second_list = []
     for relationship in second_query_results:
         second_list.append(relationship['first_username'])
-
-    """
-    second_query.projection = ['first_username']
-
-    second_list = []
-    for relationship in second_query.fetch(100):
-        second_list.append(relationship['first_username'])
-    """
 
     matched_list = first_list + second_list
     return matched_list
@@ -383,15 +333,6 @@ def make_match(username):
     other_user_list = []
     for potential_match in other_user_results:
         other_user_list.append(potential_match['username'])
-
-    """
-    # This resulted in an error.
-    other_user_query.projection = ['username']
-
-    other_user_list = []
-    for potential_match in other_user_query.fetch(100):
-        other_user_list.append(potential_match['username'])
-    """
 
     relationship = None
     for other_username in other_user_list:
@@ -434,7 +375,6 @@ def get_all_locations():
 
 def save_new_user(user, passwordhash):
     """Save the user details to the datastore."""
-
     client = _get_client()
     entity = datastore.Entity(_load_key(client, _USER_ENTITY, user.username))
     entity['username'] = user.username
@@ -455,7 +395,6 @@ def save_new_user(user, passwordhash):
 
 def save_about_user(username, about):
     """Save the user's about info to the datastore."""
-
     client = _get_client()
     user = _load_entity(client, _USER_ENTITY, username)
     user['about'] = about
@@ -463,9 +402,7 @@ def save_about_user(username, about):
 
 
 def create_data(num=50, state='PA', city='Pittsburgh'):
-    """You can use this function to populate the datastore with some basic
-    data."""
-
+    """Populates Datastore with sample users. This can only be used by admins."""
     random_id = random.randint(0, 2147483647)
 
     for i in range(num):
@@ -491,6 +428,5 @@ def get_password_hash(pw):
     """This will give us a hashed password that will be extremlely difficult to
     reverse.  Creating this as a separate function allows us to perform this
     operation consistently every time we use it."""
-
     encoded = pw.encode('utf-8')
     return hashlib.sha256(encoded).hexdigest()
