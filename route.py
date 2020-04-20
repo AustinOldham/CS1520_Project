@@ -162,7 +162,7 @@ def load_chatroom():
 			data.save_new_chatroom(user, other)
 	
 	if request.method == 'POST':
-		app.logger.info('Message: %s', message)		
+		app.logger.info('Message: %s', request.form['message'])
 		data.save_message(user, other, request.form['message'])
 
 	chatroom = data.load_chatroom(user, other)	
