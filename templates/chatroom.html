@@ -33,6 +33,15 @@
 	<ul class = "no-bullet" id="list">
     </ul>
 </div>
+<div class="container" style="word-wrap: break-word;">
+	{% for message in feed %}
+	<div class="row bg-light rounded mt-3">
+		<div class="col-sm-5 mt-3">
+			<p>{{ message }}</p>
+		</div>
+	</div>
+	{% endfor %}
+</div>
 <form method="post" action="/chat/{{current_user}}/{{other_user}}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
