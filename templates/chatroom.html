@@ -34,11 +34,13 @@
 		nav ul{height:200px; width:18%;}
 		nav ul{overflow:hidden; overflow-y:scroll;}
 	</style>
-	<ul class = "no-bullet" id="list">
-		{% for key in messages %}
-			<li>{{ key }}</li>
-		{% endfor %}
-    </ul>
+	<nav>
+		<ul class = "no-bullet" id="list">
+			{% for key in messages %}
+				<li>{{ key }}</li>
+			{% endfor %}
+		</ul>
+	</nav>
 </div>
 <div class="container" style="word-wrap: break-word;">
 	{% for key in messages %}
