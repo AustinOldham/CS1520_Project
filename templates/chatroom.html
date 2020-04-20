@@ -42,7 +42,7 @@
 	</div>
 	{% endfor %}
 </div>
-<form method="post" action="{{ url_for('load_chatroom', user=current_user, other=key) }}">
+<form method="post" action="{{ url_for('load_chatroom', user=current_user, other=other_user) }}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
         <input type="text" name="message" class="form-control" id="messageInput">
