@@ -167,7 +167,7 @@ def load_chatroom(user, other):
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		app.logger.info('Message: %s', message)
 		
-		data.save_message(current_user, other_user, message)
+		data.save_message(user, other, message)
 		feed.append(message)
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
