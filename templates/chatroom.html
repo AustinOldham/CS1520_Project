@@ -31,16 +31,16 @@
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
 <div class="container" style="word-wrap: break-word;">
 	<style>
-		nav ul{height:200px; width:18%;}
-		nav ul{overflow:hidden; overflow-y:scroll;}
+		.no-bullet{
+			height:200px; width:18%;
+			overflow:hidden; overflow-y:scroll;
+		}
 	</style>
-	<nav>
-		<ul class = "no-bullet" id="list">
-			{% for key in messages %}
-				<li>{{ key }}</li>
-			{% endfor %}
-		</ul>
-	</nav>
+	<ul class = "no-bullet" id="list">
+		{% for key in messages %}
+			<li>{{ key }}</li>
+		{% endfor %}
+	</ul>
 </div>
 <div class="container" style="word-wrap: break-word;">
 	{% for key in messages %}
