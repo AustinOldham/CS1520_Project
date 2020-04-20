@@ -120,7 +120,7 @@ def save_message(current_user, other_user, message):
 
     client = _get_client()
 
-    chatroom = load_chatroom_messages(current_user, other_user)
+    chatroom = load_chatroom(current_user, other_user)
     chatroom['messages'].append(message)
     client.put(chatroom)
 
