@@ -133,7 +133,7 @@ def save_new_chatroom(current_user, other_user):
     #generate hash from combination of two usernames
     keyString = current_user + other_user
     code = keyString.encode('utf-8')
-    key = hashlib.sha256(code1).hexdigest()
+    key = hashlib.sha256(code).hexdigest()
 
     entity['key'] = key
     entity['messages'] = []
