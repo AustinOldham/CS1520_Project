@@ -9,6 +9,9 @@
 	{% endif %}
 {% endblock %}
 {% block content %}
+{% if is_owner %}
+    <a class="btn btn-primary" style="margin:0 0 20px 0;" href="{{ url_for('editprofile') }}">Edit Profile</a>
+{% endif %}
 <div class="container bg-light rounded" style="word-wrap: break-word;">
 	<div class="row">
 		<div class="col-sm-4 mt-3"><img src="/static/images/{{avatar}}" class="img-fluid border border-dark rounded" alt="Profile picture"></div>

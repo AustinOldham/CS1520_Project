@@ -32,7 +32,9 @@ def signin():
 
 @app.route('/editprofile.html')
 def editprofile():
-	return render_template('editprofile.html', page_title='Edit Profile')
+    username = session['user']
+    user = data.load_public_user(username)
+    return render_template('editprofile.html', page_title='Edit Profile', first_name=user.firstname, last_name=user.lastname, gender_text=user.gender, age_text=user.age, state=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, avatar=user.avatar)
 
 
 @app.route('/signin_user', methods=['POST'])
