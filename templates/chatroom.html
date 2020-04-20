@@ -5,7 +5,7 @@
 
 	function sse()
 	{  		
-		var myEventSource = new EventSource("/chat/{{current_user}}/{{other_user}}");
+		var myEventSource = new EventSource("{{ url_for('load_chatroom', user=current_user, other=other_user) }}");
 
 		console.log("sse() executing")
 
