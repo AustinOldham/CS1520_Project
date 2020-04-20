@@ -89,7 +89,7 @@ def load_user(username, passwordhash):
     return None
 
 def load_chatroom(current_user, other_user):
-    """Load a chatroom based on the hash of the two usernames; if the passwordhash doesn't match
+    """Load a chatroom based on the hash of the two usernames; if the hash doesn't match
     the username, then this should return None."""
 
     client = _get_client()
@@ -97,13 +97,16 @@ def load_chatroom(current_user, other_user):
     q2 = client.query(kind=_CHATROOM_ENTITY)
 
     #generate hash from combination of two usernames
-    keyString = current_user + other_user
-    encoded = keyString.encode('utf-8')
-    key = hashlib.sha256(encoded).hexdigest()
+    keyString1 = current_user + other_user
+    keyString2 = other_user + current_user
+    code1 = keyString1.encode('utf-8')
+    code2 = keyString2.encode('utf-8')
+    key1 = hashlib.sha256(code1).hexdigest()
+    key2 = hashlib.sha256(code2).hexdigest()
 
     #hash should be one of two values depending on name order
-    q1.add_filter('Key1', '=', key)
-    q2.add_filter('Key2', '=', key)
+    q1.add_filter('key', '=', key1)
+    q2.add_filter('key', '=', key2)
     
     for chatroom in q1.fetch():
         return chatroom
@@ -128,16 +131,12 @@ def save_new_chatroom(current_user, other_user):
     entity = datastore.Entity(_load_key(client, _CHATROOM_ENTITY))
     
     #generate hash from combination of two usernames
-    keyString1 = current_user + other_user
-    keyString2 = other_user + current_user
-    code1 = keyString1.encode('utf-8')
-    code2 = keyString1.encode('utf-8')
-    key1 = hashlib.sha256(code1).hexdigest()
-    key2 = hashlib.sha256(code2).hexdigest()
+    keyString = current_user + other_user
+    code = keyString1.encode('utf-8')
+    key = hashlib.sha256(code1).hexdigest()
 
-    entity['key1'] = key1
-    entity['key2'] = key2
-    entity['Messages'] = []
+    entity['key'] = key
+    entity['messages'] = []
     client.put(entity)
 
 # Note: This may be removed in the future

@@ -156,11 +156,10 @@ def load_chatroom(user, other):
 	username = session['user']
 
 	chatroom = data.load_chatroom(user, other)
-	if not chatroom:
+	if chatroom is None:
 		data.save_new_chatroom(user, other)
-	feed = []
-	if chatroom['messages']:
-		feed = chatroom['messages']
+		chatroom = data.load_chatroom(user, other)
+	feed = chatroom['messages']
 	
 	if request.method == 'POST':
 
