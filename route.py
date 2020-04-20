@@ -164,6 +164,7 @@ def load_chatroom():
 	if request.method == 'POST':
 		app.logger.info('Message: %s', request.form['message'])
 		data.save_message(user, other, request.form['message'])
+		return redirect(url_for('load_chatroom', user=user, other=other)) #redirect after post to prevent double sending
 
 	chatroom = data.load_chatroom(user, other)
 	feed = chatroom['messages']
