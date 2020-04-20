@@ -6,9 +6,6 @@ import data
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
-feed = []
-previous_feed = []
-
 # Dictionary that contains the messages that will be displayed on error.html.
 error_codes = {
 	"match_not_found": "There were no roommates that matched your preferences. Try a more broad search."
@@ -32,9 +29,7 @@ def signin():
 
 @app.route('/editprofile.html')
 def editprofile():
-    username = session['user']
-    user = data.load_public_user(username)
-    return render_template('editprofile.html', page_title='Edit Profile', first_name=user.firstname, last_name=user.lastname, gender_text=user.gender, age_text=user.age, state=user.state, city_text=user.city, about_text=user.about, bio_text=user.bio, avatar=user.avatar)
+	return render_template('editprofile.html', page_title='Edit Profile')
 
 
 @app.route('/signin_user', methods=['POST'])
@@ -158,18 +153,19 @@ def match_list():
 
 @app.route('/chat/<user>/<other>', methods=['GET','POST'])
 def load_chatroom(user, other):
-
 	username = session['user']
+
+	chatroom = data.load_chatroom(user, other)
+	if not chatroom:
+		data.save_new_chatroom(user, other)
+	feed = chatroom['messages']
+	
 	if request.method == 'POST':
 
 		now = datetime.datetime.now().replace(microsecond=0).time()
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		app.logger.info('Message: %s', message)
-
-		chatroom = data.load_chatroom(user, other)
-		if not chatroom:
-			data.save_new_chatroom(user, other)
-		feed = chatroom['messages']
+		
 		data.save_message(current_user, other_user, message)
 		feed.append(message)
 
