@@ -165,11 +165,8 @@ def load_chatroom():
 	
 	if request.method == 'POST':
 
-		now = datetime.datetime.now().replace(microsecond=0).time()
-		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-		app.logger.info('Message: %s', message)
-		
-		data.save_message(user, other, message)
+		app.logger.info('Message: %s', message)		
+		data.save_message(user, other, request.form['message'])
 		feed.append(message)
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)

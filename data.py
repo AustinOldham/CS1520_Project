@@ -115,13 +115,14 @@ def load_chatroom(current_user, other_user):
     return None
 
 def save_message(current_user, other_user, message):
-    """Load a chatroom based on the hash of the two usernames; if the passwordhash doesn't match
-    the username, then this should return None."""
+    """save JSON object with timestamp, message, and the user who sent the message"""
 
     client = _get_client()
-
     chatroom = load_chatroom(current_user, other_user)
-    chatroom['messages'].append(message)
+
+    current_time = datetime.now(timezone.utc)
+    dump = json.dumps({"time": current_time, "from_user": current_user, "message": message})
+    chatroom['messages'].append(dump)
     client.put(chatroom)
 
 def save_new_chatroom(current_user, other_user):

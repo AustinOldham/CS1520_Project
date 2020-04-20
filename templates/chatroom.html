@@ -38,7 +38,7 @@
 	</style>
 	<ul class = "no-bullet" style="list-style-type:none" id="list">
 		{% for key in messages %}
-			<li>{{ key }}</li>
+			<li id="m{{loop.index}}">{{ key }}</li>
 		{% endfor %}
 	</ul>
 </div>
