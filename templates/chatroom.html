@@ -34,10 +34,10 @@
     </ul>
 </div>
 <div class="container" style="word-wrap: break-word;">
-	{% for message in feed %}
+	{% for key in messages %}
 	<div class="row bg-light rounded mt-3">
 		<div class="col-sm-5 mt-3">
-			<p>{{ message }}</p>
+			<p>{{ key }}</p>
 		</div>
 	</div>
 	{% endfor %}
