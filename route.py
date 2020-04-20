@@ -151,9 +151,11 @@ def match_list():
 
 
 
-@app.route('/chat/<user>/<other>', methods=['GET','POST'])
-def load_chatroom(user, other):
+@app.route('/chat/', methods=['GET','POST'])
+def load_chatroom():
 	username = session['user']
+	current_user = request.args.get('user')
+	other_user = request.args.get('other')
 
 	chatroom = data.load_chatroom(user, other)
 	if chatroom is None:
@@ -167,7 +169,7 @@ def load_chatroom(user, other):
 		message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
 		app.logger.info('Message: %s', message)
 		
-		data.save_message(user, other, message)
+		data.save_message(current_user, other_user, message)
 		feed.append(message)
 
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
