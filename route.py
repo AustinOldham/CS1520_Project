@@ -157,18 +157,16 @@ def load_chatroom():
 	user = request.args.get('user')
 	other = request.args.get('other')
 
-	chatroom = data.load_chatroom(user, other)
-	if chatroom is None:
-		data.save_new_chatroom(user, other)
-		chatroom = data.load_chatroom(user, other)
-	feed = chatroom['messages']
+	if request.method == 'GET':
+		if data.load_chatroom(user, other) is None:
+			data.save_new_chatroom(user, other)
 	
 	if request.method == 'POST':
-
 		app.logger.info('Message: %s', message)		
 		data.save_message(user, other, request.form['message'])
-		feed.append(message)
 
+	chatroom = data.load_chatroom(user, other)	
+	feed = chatroom['messages']
 	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
 
 @app.route('/stream/<user>/<other>', methods=['GET','POST'])
