@@ -158,7 +158,9 @@ def load_chatroom(user, other):
 	chatroom = data.load_chatroom(user, other)
 	if not chatroom:
 		data.save_new_chatroom(user, other)
-	feed = chatroom['messages']
+	feed = []
+	if chatroom['messages']:
+		feed = chatroom['messages']
 	
 	if request.method == 'POST':
 
