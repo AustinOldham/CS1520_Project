@@ -3,6 +3,7 @@ from email.utils import parseaddr
 from main import app
 import datetime
 import data
+import json
 
 # Part of this code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
@@ -168,7 +169,7 @@ def load_chatroom():
 
 	chatroom = data.load_chatroom(user, other)
 	feed = chatroom['messages']
-	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed)
+	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed, json_messages=json.dumps(feed))
 
 @app.route('/stream/<user>/<other>', methods=['GET','POST'])
 def stream(user, other):
