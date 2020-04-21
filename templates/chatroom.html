@@ -30,11 +30,17 @@
 	//populate messages using JS
 	function populateMessageList(){
 		var ul = document.getElementById("list");
-		var messages = "{{ json_messages | tojson }}";
-		var jsonObj = $.parseJSON(messages);
+		
+		console.log("{{messages}}");
+		console.log("{{messages | tojson}}");
+		console.log("{{json_messages}}");
+		console.log("{{json_messages | tojson}}");
+
+		var messages = "{{ json_messages | tojson }}";		
 		console.log(messages);
 		console.log(messages[0]);
 		console.log(messages[5]);
+		var jsonObj = $.parseJSON(messages);
 		console.log(jsonObj[0]);
 		console.log(jsonObj[5]);
 		for(var i=0;i<messages.length;i++){
