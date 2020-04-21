@@ -51,8 +51,7 @@
 			ul.appendChild(li);
 		}
 	}
-	document.onload = sse();
-	document.onload = populateMessageList();
+	sse();
 </script>
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
 <div class="container" style="word-wrap: break-word;">
@@ -62,7 +61,7 @@
 			overflow:hidden; overflow-y:scroll;
 		}
 	</style>
-	<ul class = "no-bullet" style="list-style-type:none" id="list">
+	<ul class="no-bullet" style="list-style-type:none" id="list" onload="populateMessageList();">
 		{% for key in messages %}
 			<li id="m{{loop.index}}">{{ key }}</li>
 		{% endfor %}
