@@ -174,7 +174,9 @@ def load_chatroom():
 
 	chatroom = data.load_chatroom(user, other)
 	feed = chatroom['messages']
-	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed, json_messages=json.dumps({"messages": feed}))
+	current_user_avatar = data.load_public_user(user).avatar
+	other_user_avatar = data.load_public_user(other).avatar
+	return render_template('chatroom.html', page_title="Chat", current_user=user, current_user_avatar=current_user_avatar, other_user=other, other_user_avatar=other_user_avatar, messages=feed, json_messages=json.dumps({"messages": feed}))
 
 @app.route('/stream/<user>/<other>', methods=['GET','POST'])
 def stream(user, other):

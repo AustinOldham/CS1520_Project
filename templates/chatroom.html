@@ -55,7 +55,7 @@
 </script>
 <div class="row bg-light rounded mt-3">
 	<div class="col-sm-1 mt-1">
-		<img src="/static/images/{{matched_avatars[loop.index0]}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+		<img src="/static/images/{{other_user_avatar}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 	</div>
 	<div class="col-sm-3 mt-3">
 		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body">{{ other_user }}</a>
