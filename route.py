@@ -169,7 +169,7 @@ def load_chatroom():
 
 	chatroom = data.load_chatroom(user, other)
 	feed = chatroom['messages']
-	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed, json_messages=json.dumps("messages", feed))
+	return render_template('chatroom.html', page_title="Chat", current_user=user, other_user=other, messages=feed, json_messages=json.dumps("messages": str(feed)))
 
 @app.route('/stream/<user>/<other>', methods=['GET','POST'])
 def stream(user, other):
