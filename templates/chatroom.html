@@ -53,29 +53,36 @@
 	sse();
 	window.onload = populateMessageList;
 </script>
-<div>
-	<div class="col-sm-1 mt-1">
-		<img src="/static/images/{{other_user_avatar}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+<style>
+	.no-bullet{
+		height:500px; width:100%;
+		overflow:hidden; overflow-y:scroll;
+	}
+
+	.pull-left{ float: left;}
+	.pull-right{float: right;}
+
+	.column{
+		float: left;
+		padding: 5px;
+	}
+  
+	/* Clear floats after image containers */
+	.row::after{
+		content: "";
+		clear: both;
+		display: table;
+	}
+</style>
+<div class="row">
+	<div class="column">
+		<img src="/static/images/{{other_user_avatar}}" class="img-fluid border border-dark rounded" style="width: auto; height: 100px;" alt="Profile picture">
 	</div>
-	<div class="col-sm-3 mt-3">
-		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body" style="font-size:30px">{{ other_user }}</a>
+	<div class="column">
+		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body" style="font-size:40px">{{ other_user }}</a>
 	</div>
 </div>
 <div class="container" style="word-wrap: break-word;">
-	<style>
-		.no-bullet{
-			height:500px; width:100%;
-			overflow:hidden; overflow-y:scroll;
-		}
-
-		.pull-left{
-			float: left;
-		}
-
-		.pull-right{
-			float: right;
-		}
-	</style>
 	<ul class="no-bullet" style="list-style-type:none" id="list">
 	</ul>
 </div>
