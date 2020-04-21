@@ -38,19 +38,22 @@
 			var li = document.createElement("li");
 			console.log("messages[i] = " + messages[i]);
 			var obj = JSON.parse(messages[i]);
+			
 			time = obj.time.split(" ")[1];
 
 			if(obj.from_user == '{{current_user}}'){
-				li.classList.add("pull-right");
 				li.innerHTML = "<span style=\"color:blue\">" + time + ' ' + obj.from_user + "</span> " + obj.message;
-			}else{
-				li.classList.add("pull-left");
+			}else{				
 				li.innerHTML = "<span style=\"color:red\">" + time + ' ' + obj.from_user + "</span> " + obj.message;
 			}
+
+			li.classList.add("pull-left");
 			ul.appendChild(li);
 			var br = document.createElement("br");
 			ul.appendChild(br);
 		}
+
+		ul.scrollTop = ul.scrollHeight;
 	}
 	sse();
 	window.onload = populateMessageList;
