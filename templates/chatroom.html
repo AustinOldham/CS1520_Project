@@ -31,9 +31,12 @@
 	function populateMessageList(){
 		var ul = document.getElementById("list");
 		var messages = '{{ json_messages | tojson }}';
+		var myObject = eval('(' + s + ')');
 		console.log(messages);
 		console.log(messages[0]);
 		console.log(messages[5]);
+		console.log(myObject[0]);
+		console.log(myObject[5]);
 		for(var i=0;i<messages.length;i++){
 			var li = document.createElement("li");
 			var obj = JSON.parse(messages[i]);
