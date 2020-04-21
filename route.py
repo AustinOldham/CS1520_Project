@@ -150,7 +150,7 @@ def match_list():
 		liked_avatars.append(data.load_public_user(user).avatar)
 	for user in matched_users:
 		matched_avatars.append(data.load_public_user(user).avatar)
-	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_usernames), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
+	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
 
 
