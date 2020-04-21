@@ -51,7 +51,7 @@
 			var obj = JSON.parse(messages[i]);
 			time = obj.time.split(" ")[1];
 			li.appendChild(document.createTextNode(time.concat(' ', obj.from_user, ' ', obj.message)));
-			if(obj.from_user == {{current_user}}){
+			if(obj.from_user == '{{current_user}}'){
 				li.classList.add("pull-right");
 			}else{
 				li.classList.add("pull-left");
