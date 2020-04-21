@@ -28,7 +28,7 @@
 	}
 
 	//populate messages using JS
-	function populateMessageList(){
+	populateMessageList(){
 		var ul = document.getElementById("list");
 
 		console.log({{ messages | safe }});
@@ -51,8 +51,8 @@
 			ul.appendChild(li);
 		}
 	}
-	sse();
-	populateMessageList();
+	document.onload = sse();
+	document.onload = populateMessageList();
 </script>
 <h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
 <div class="container" style="word-wrap: break-word;">
