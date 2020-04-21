@@ -36,7 +36,7 @@
 		console.log('{{json_messages|safe}}');
 		console.log('{{json_messages | tojson | safe}}');
 
-		var messages = '{{ json_messages | tojson }}';		
+		var messages = {{ messages | tojson }};
 		console.log(messages);
 		console.log(messages[0]);
 		console.log(messages[5]);
