@@ -67,15 +67,14 @@
 	.column{
 		padding: 5px;
 		vertical-align:middle;
-		display: inline-block;
 	}
   
 	/* Clear floats after image containers */
 	.row::after{
 		content: "";
 		clear: both;
-		display: table;
-		text-align: center;
+		display: flex;
+		justify-content: center;
 	}
 </style>
 <div class="row">
@@ -86,7 +85,7 @@
 		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body" style="font-size:40px">{{ other_user }}</a>
 	</div>
 </div>
-<div class="container" style="word-wrap: break-word; border-style: solid; border-width: 2px; padding-bottom: 20px; padding-top: 20px;">
+<div class="container" style="word-wrap: break-word; border-style: solid; border-width: 1px; padding-bottom: 20px; padding-top: 20px;">
 	<ul class="no-bullet" style="list-style-type:none" id="list">
 	</ul>
 </div>
