@@ -62,12 +62,13 @@
 	}
 
 	.pull-left{ float: left;}
-	.pull-right{float: right;}
+	.pull-right{ float: right;}
 
 	.column{
 		float: left;
 		padding: 5px;
 		vertical-align:middle;
+		display: inline-block;
 	}
   
 	/* Clear floats after image containers */
@@ -75,6 +76,7 @@
 		content: "";
 		clear: both;
 		display: table;
+		text-align: center;
 	}
 </style>
 <div class="row">
@@ -85,21 +87,10 @@
 		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body" style="font-size:40px">{{ other_user }}</a>
 	</div>
 </div>
-<div class="container" style="word-wrap: break-word; border-style: solid; border-width: 2px;">
+<div class="container" style="word-wrap: break-word; border-style: solid; border-width: 2px; padding-left: 0px; margin-left: 0px;">
 	<ul class="no-bullet" style="list-style-type:none" id="list">
 	</ul>
 </div>
-<!--
-<div class="container" style="word-wrap: break-word;">
-	{% for key in messages %}
-	<div class="row bg-light rounded mt-3">
-		<div class="col-sm-5 mt-3">
-			<p>{{ key }}</p>
-		</div>
-	</div>
-	{% endfor %}
-</div>
--->
 <form method="post" action="{{ url_for('load_chatroom', user=current_user, other=other_user) }}">
     <div class="form-group">
         <label for="messageInput">Type message here</label>
