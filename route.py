@@ -143,19 +143,14 @@ def find_match():
 def match_list():
 	username = session['user']
 	liked_users = data.get_liked_users(username)
-	matched_usernames = []
+	matched_users = data.get_matched_users(username)
 	matched_avatars = []
-	waiting_usernames = []
-	waiting_avatars = []
+	liked_avatars = []
 	for user in liked_users:
-		other_user = data.load_public_user(user)
-		if username in data.get_liked_users(user):
-			matched_usernames.append(user)
-			matched_avatars.append(other_user.avatar)
-		else:
-			waiting_usernames.append(user)
-			waiting_avatars.append(other_user.avatar)
-	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_usernames, matched_avatars=matched_avatars, num_matches=len(matched_usernames), waiting=waiting_usernames, waiting_avatars=waiting_avatars, page_index=0)
+		liked_avatars.append(user.avatar)
+	for user in matched_users:
+		matched_avatars.append(user.avatar)
+	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_usernames), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
 
 
