@@ -34,23 +34,32 @@
 		var ul = document.getElementById("list");
 
 		var messages = {{ messages | tojson }};
+		var curr_date = "";
 		for(var i=0;i<messages.length;i++){
 			var li = document.createElement("li");
 			console.log("messages[i] = " + messages[i]);
 			var obj = JSON.parse(messages[i]);
-			
-			time = obj.time.split(" ")[1];
+
+			var datetime = obj.time.split(", ");
+
+			if(curr_date != datetime[0]){
+				curr_date = datetime[0];
+				var date_break = document.createElement("li");
+				date_break.appendChild(document.createTextNode(curr_date));
+				date_break.style.cssText = 'text-align:center;';
+				ul.appendChild(date_break);
+				ul.appendChild(document.createElement("br"));
+			}
 
 			if(obj.from_user == '{{current_user}}'){
-				li.innerHTML = "<span style=\"color:blue\">" + time + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:blue\">" + datetime[1] + ' ' + obj.from_user + "</span> " + obj.message;
 			}else{				
-				li.innerHTML = "<span style=\"color:red\">" + time + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:red\">" + datetime[1] + ' ' + obj.from_user + "</span> " + obj.message;
 			}
 
 			li.classList.add("pull-left");
 			ul.appendChild(li);
-			var br = document.createElement("br");
-			ul.appendChild(br);
+			ul.appendChild(document.createElement("br"));
 		}
 
 		ul.scrollTop = ul.scrollHeight;
@@ -66,7 +75,7 @@
 		overflow:hidden; overflow-y:scroll;
 	}
 
-	.pull-left{ float: left;}
+	.pull-left{ float: left; font-size: 20px;}
 	.pull-right{ float: right;}
 
 	.column{
@@ -99,7 +108,7 @@
 	</ul>
 </div>
 <form method="post" action="{{ url_for('load_chatroom', user=current_user, other=other_user) }}">
-    <div class="form-group">
+    <div class="form-group" style="padding-top: 20px;">
         <!--<label for="messageInput">Type message here</label>-->
 		<input type="text" name="message" class="form-control" style="width: 100%" id="messageInput">
 		<button type="submit" class="btn btn-primary">Send</button>
