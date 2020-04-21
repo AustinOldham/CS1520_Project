@@ -31,7 +31,8 @@
 	function populateMessageList(){
 		var ul = document.getElementById("list");
 
-		console.log('{{messages|safe}}');
+		console.log({{ messages | safe }});
+		console.log({{ messages | tojson }});
 		console.log('{{json_messages|safe}}');
 		console.log('{{json_messages | tojson | safe}}');
 
