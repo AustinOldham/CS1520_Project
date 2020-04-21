@@ -70,11 +70,15 @@
 	}
   
 	/* Clear floats after image containers */
+	.row{
+		display: flex;
+		justify-content: center;
+	}
+
 	.row::after{
 		content: "";
 		clear: both;
-		display: flex;
-		justify-content: center;
+		
 	}
 </style>
 <div class="row">
@@ -91,8 +95,8 @@
 </div>
 <form method="post" action="{{ url_for('load_chatroom', user=current_user, other=other_user) }}">
     <div class="form-group">
-        <label for="messageInput">Type message here</label>
-		<input type="text" name="message" class="form-control" style="width: 80%" id="messageInput">
+        <!--<label for="messageInput">Type message here</label>-->
+		<input type="text" name="message" class="form-control" style="width: 100%" id="messageInput">
 		<button type="submit" class="btn btn-primary">Send</button>
     </div>
 </form>
