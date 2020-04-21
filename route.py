@@ -147,9 +147,9 @@ def match_list():
 	matched_avatars = []
 	waiting_usernames = []
 	waiting_avatars = []
-	for user in liked_users.keys():
+	for user in liked_users:
 		other_user = data.load_public_user(user)
-		if username in data.get_liked_users(user).keys():
+		if username in data.get_liked_users(user):
 			matched_usernames.append(user)
 			matched_avatars.append(other_user.avatar)
 		else:
