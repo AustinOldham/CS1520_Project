@@ -30,7 +30,7 @@
 	//populate messages using JS
 	function populateMessageList(){
 		var ul = document.getElementById("list");
-		var messages = '{{ json|messages }}';
+		var messages = '{{ json_messages }}';
 		console.log(messages);
 		console.log(messages[0]);
 		console.log(messages[5]);
