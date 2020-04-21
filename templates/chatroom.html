@@ -33,18 +33,7 @@
 
 		var ul = document.getElementById("list");
 
-		console.log({{ messages | safe }});
-		console.log({{ messages | tojson }});
-		console.log('{{json_messages|safe}}');
-		console.log('{{json_messages | tojson | safe}}');
-
 		var messages = {{ messages | tojson }};
-		console.log(messages);
-		console.log(messages[0]);
-		console.log(messages[5]);
-		//var jsonObj = $.parseJSON(messages);
-		//console.log(jsonObj[0]);
-		//console.log(jsonObj[5]);
 		for(var i=0;i<messages.length;i++){
 			var li = document.createElement("li");
 			console.log("messages[i] = " + messages[i]);
@@ -64,7 +53,14 @@
 	sse();
 	window.onload = populateMessageList;
 </script>
-<h2>Chatroom placeholder for {{current_user}} and {{other_user}}</h2>
+<div class="row bg-light rounded mt-3">
+	<div class="col-sm-1 mt-1">
+		<img src="/static/images/{{matched_avatars[loop.index0]}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+	</div>
+	<div class="col-sm-3 mt-3">
+		<a href="{{ url_for('profile_page', username=other_user) }}" class="text-body">{{ other_user }}</a>
+	</div>
+</div>
 <div class="container" style="word-wrap: break-word;">
 	<style>
 		.no-bullet{
@@ -81,9 +77,6 @@
 		}
 	</style>
 	<ul class="no-bullet" style="list-style-type:none" id="list">
-		{% for key in messages %}
-			<li id="m{{loop.index}}">{{ key }}</li>
-		{% endfor %}
 	</ul>
 </div>
 <!--
