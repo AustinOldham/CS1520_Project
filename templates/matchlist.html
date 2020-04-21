@@ -11,7 +11,7 @@
 			<p class="font-weight-bold ml-3">{{ loop.index + page_index }}</p>
 		</div>
 		<div class="col-sm-1 my-1">
-			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+			<img src="/static/images/{{matched_avatars[loop.index]}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 		</div>
 		<div class="col-sm-3 mt-3">
 			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{ key }}</a>
@@ -30,7 +30,7 @@
 			<p class="font-weight-bold ml-3">{{ loop.index + num_matches }}</p>
 		</div>
 		<div class="col-sm-1 my-1">
-			<img src="/static/images/placeholder_profile.png" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
+			<img src="/static/images/{{waiting_avatars[loop.index]}}" class="img-fluid border border-dark rounded" style="width: auto; height: 50px;" alt="Profile picture">
 		</div>
 		<div class="col-sm-3 mt-3">
 			<a href="{{ url_for('profile_page', username=key) }}" class="text-body">{{ key }}</a>
