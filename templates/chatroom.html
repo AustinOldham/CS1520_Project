@@ -2,31 +2,6 @@
 {% block nav_index %}active{% endblock %}
 {% block content %}
 <script type="text/javascript">
-
-	function sse()
-	{  		
-		var myEventSource = new EventSource("{{ url_for('load_chatroom', user=current_user, other=other_user) }}");
-
-		console.log("sse() executing")
-
-		myEventSource.onmessage = function(e) {
-			var ul = document.getElementById("list");
-			var li = document.createElement("li");
-  			li.appendChild(document.createTextNode(str.concat(e.data)));
-  			ul.appendChild(li);
-			console.log("myEventSource triggered")
-		};
-		/*
-		otherEventSource.onmessage = function(e) {
-			var ul = document.getElementById("list");
-			var li = document.createElement("li");
-			var str = "JS "
-  			li.appendChild(document.createTextNode(str.concat(e.data)));
-  			ul.appendChild(li);
-			console.log("otherEventSourc triggered")
-		};*/		
-	}
-
 	function UTCToLocalDate(date){
 		var local_date = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
 		var offset = date.getTimezoneOffset()/60
@@ -90,7 +65,6 @@
 
 		ul.scrollTop = ul.scrollHeight;
 	}
-	sse();
 	window.onload = populateMessageList;
 </script>
 <style>
