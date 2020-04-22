@@ -141,58 +141,58 @@ def find_match():
 
 @app.route('/matches')
 def match_list():
-	username = session['user']
-	liked_users = data.get_liked_users(username)
-	matched_users = data.get_matched_users(username)
-	matched_avatars = []
-	liked_avatars = []
-	for user in liked_users:
-		liked_avatars.append(data.load_public_user(user).avatar)
-	for user in matched_users:
-		matched_avatars.append(data.load_public_user(user).avatar)
-	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
+    username = session['user']
+    liked_users = data.get_liked_users(username)
+    matched_users = data.get_matched_users(username)
+    matched_avatars = []
+    liked_avatars = []
+    for user in liked_users:
+        liked_avatars.append(data.load_public_user(user).avatar)
+    for user in matched_users:
+        matched_avatars.append(data.load_public_user(user).avatar)
+    return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
 @app.route('/countnewmessages')
 def count_messages():
-	username = session['user']
-	matched_users = data.get_matched_users(username)
-	received_messages = 0
-	for other_user in matched_users:
-		chatroom = data.load_chatroom(username, other_user)
-		if chatroom is not None:
-			for message in chatroom['messages']:
-				if message.find("from_user\": \""+username+"\"") == -1:
-					received_messages += 1
+    username = session['user']
+    matched_users = data.get_matched_users(username)
+    received_messages = 0
+    for other_user in matched_users:
+        chatroom = data.load_chatroom(username, other_user)
+        if chatroom is not None:
+            for message in chatroom['messages']:
+                if message.find("from_user\": \""+username+"\"") == -1:
+                    received_messages += 1
 
-	message_cookie = data.load_num_messages(username)
-	if message_cookie is None:
-		data.save_new_message_cookie(username, received_messages)
-		return str(received_messages), 200
-	else:
-		new_messages = received_messages - message_cookie['num_messages']
-		data.save_num_messages(username, received_messages)
-		return str(new_messages), 200
+    message_cookie = data.load_num_messages(username)
+    if message_cookie is None:
+        data.save_new_message_cookie(username, received_messages)
+        return str(received_messages), 200
+    else:
+        new_messages = received_messages - message_cookie['num_messages']
+        data.save_num_messages(username, received_messages)
+        return str(new_messages), 200
 
 @app.route('/chat/', methods=['GET','POST'])
 def load_chatroom():
-	username = session['user']
-	user = request.args.get('user')
-	other = request.args.get('other')
+    username = session['user']
+    user = request.args.get('user')
+    other = request.args.get('other')
 
-	if request.method == 'GET':
-		if data.load_chatroom(user, other) is None:
-			data.save_new_chatroom(user, other)
+    if request.method == 'GET':
+        if data.load_chatroom(user, other) is None:
+            data.save_new_chatroom(user, other)
 
-	if request.method == 'POST':
-		app.logger.info('Message: %s', request.form['message'])
-		data.save_message(user, other, request.form['message'])
-		return redirect(url_for('load_chatroom', user=user, other=other)) #redirect after post to prevent double sending
+    if request.method == 'POST':
+        app.logger.info('Message: %s', request.form['message'])
+        data.save_message(user, other, request.form['message'])
+        return redirect(url_for('load_chatroom', user=user, other=other)) #redirect after post to prevent double sending
 
-	chatroom = data.load_chatroom(user, other)
-	feed = chatroom['messages']
-	current_user_avatar = data.load_public_user(user).avatar
-	other_user_avatar = data.load_public_user(other).avatar
-	return render_template('chatroom.html', page_title="Chat", current_user=user, current_user_avatar=current_user_avatar, other_user=other, other_user_avatar=other_user_avatar, messages=feed)
+    chatroom = data.load_chatroom(user, other)
+    feed = chatroom['messages']
+    current_user_avatar = data.load_public_user(user).avatar
+    other_user_avatar = data.load_public_user(other).avatar
+    return render_template('chatroom.html', page_title="Chat", current_user=user, current_user_avatar=current_user_avatar, other_user=other, other_user_avatar=other_user_avatar, messages=feed)
 
 @app.route('/error')
 def error_page():
