@@ -172,7 +172,7 @@ def load_num_messages(current_user):
     key = hashlib.sha256(code).hexdigest()
 
     #hash should be one of two values depending on name order
-    q.add_filter('key', '=', key1)
+    q.add_filter('key', '=', key)
 
     for cookie in q.fetch():
         return cookie
