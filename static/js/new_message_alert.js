@@ -26,6 +26,7 @@ function store_new_message_count(num){
 function color_matches_link(){
     var matches_link = document.getElementById("my-matches-link");
     matches_link.style.color = "yellow";
+    matches_link.style.font = "bold";
 }
 
 window.onload = function() {
