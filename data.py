@@ -168,7 +168,7 @@ def load_num_messages(current_user):
 
     #generate hash from combination of two usernames
     keyString = current_user
-    code = keyString1.encode('utf-8')
+    code = keyString.encode('utf-8')
     key = hashlib.sha256(code).hexdigest()
 
     #hash should be one of two values depending on name order
