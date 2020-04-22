@@ -7,6 +7,7 @@ function check_for_new_messages() {
         console.log(new_messages);
         if(new_messages > 0){
             alert("You have " + new_messages + " new message(s)");
+            color_matches_link();
         }
         store_new_message_count(result);
 	}});
@@ -20,6 +21,11 @@ function load_current_message_count(){
 function store_new_message_count(num){
     var cookieString = num.toString();
     document.cookie = cookieString;
+}
+
+function color_matches_link(){
+    var matches_link = document.getElementById("my-matches-link");
+    matches_link.style.color = "yellow";
 }
 
 window.onload = function() {
