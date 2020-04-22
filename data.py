@@ -138,7 +138,7 @@ def save_message(current_user, other_user, message):
     chatroom = load_chatroom(current_user, other_user)
 
     current_time = datetime.now(timezone.utc)
-    epoch_ms = datetime.now().timestamp() * 1000   #time stamp in ms since epoch
+    epoch_ms = current_time.timestamp() * 1000   #utc ms timestamp
     #time_str = current_time.strftime("%m %d/%Y, %H:%M:%S")
     dump = json.dumps({"time": str(epoch_ms), "from_user": current_user, "message": message})
     chatroom['messages'].append(dump)
