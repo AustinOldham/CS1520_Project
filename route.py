@@ -152,7 +152,16 @@ def match_list():
 		matched_avatars.append(data.load_public_user(user).avatar)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
-
+@app.route('/countMessages')
+def count_messages(username):
+	username = session['user']
+	matched_users = data.get_matched_users(username)
+	total_messages = 0
+	for other_user in matched_users:
+		chatroom = data.load_chatroom(username, other_user)
+		if chatroom is not None:
+			total_messages += len(chatroom['messages'])
+	return str(total_messages), 200
 
 @app.route('/chat/', methods=['GET','POST'])
 def load_chatroom():

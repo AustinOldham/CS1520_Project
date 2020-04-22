@@ -2,12 +2,6 @@
 {% block nav_index %}active{% endblock %}
 {% block content %}
 <script type="text/javascript">
-	function UTCToLocalDate(date){
-		console.log(date.getTimezoneOffset());
-		console.log(date.getTime());
-		console.log(date.getTime()+date.getTimezoneOffset()*60*1000);
-		return new Date(date.getTime() - date.getTimezoneOffset()*60*1000);
-	}
 
 	function getDateString(date){
 		return (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
