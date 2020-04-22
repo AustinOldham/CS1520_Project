@@ -10,7 +10,7 @@
 {% endblock %}
 {% block content %}
 {% if is_owner %}
-    <a class="btn btn-primary" style="margin:0 0 20px 0;" href="{{ url_for('editprofile') }}">Edit Profile</a>
+THIS IS YOU
 {% endif %}
 <div class="container bg-light rounded" style="word-wrap: break-word;">
 	<div class="row">
@@ -44,9 +44,7 @@
 	<div class="row">
 		<div class="col-sm">
 		{% if is_owner %}
-				<li class="nav-item {% block nav_match%}{% endblock %}">
-					<a class="nav-link" href="{{ url_for('find_match') }}">EDIT</a>
-				</li>
+    <a class="btn btn-primary" style="margin:0 0 20px 0;" href="{{ url_for('editprofile') }}">Edit Profile</a>
 		{% elif is_liked %}
 			<button id="like_unlike_button" onclick="unlike_js('{{other_username}}')" class="btn btn-warning">Unlike</button>
 		{% else %}
