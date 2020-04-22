@@ -3,11 +3,7 @@
 {% block content %}
 <script type="text/javascript">
 	function UTCToLocalDate(date){
-		var local_date = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
-		var offset = date.getTimezoneOffset()/60
-		var hours = date.getHours();
-		local_date.setHours(hours - offset);
-		return local_date;
+		return new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
 	}
 
 	function getDateString(date){
