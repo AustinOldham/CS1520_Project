@@ -153,7 +153,7 @@ def match_list():
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
 @app.route('/countMessages')
-def count_messages(username):
+def count_messages():
 	username = session['user']
 	matched_users = data.get_matched_users(username)
 	total_messages = 0
