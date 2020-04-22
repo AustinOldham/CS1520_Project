@@ -8,8 +8,6 @@ import json
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
-# Everyone will likely have a different project ID. Put yours here so the
-# datastore stuff works
 _PROJECT_ID = 'squarerush'
 _USER_ENTITY = 'roommate_user'
 _CHATROOM_ENTITY = 'chatroom'
@@ -140,7 +138,6 @@ def save_message(current_user, other_user, message):
 
     current_time = datetime.now(timezone.utc)
     epoch_ms = current_time.timestamp() * 1000   #utc ms timestamp
-    #time_str = current_time.strftime("%m %d/%Y, %H:%M:%S")
     dump = json.dumps({"time": str(epoch_ms), "from_user": current_user, "message": message})
     chatroom['messages'].append(dump)
     client.put(chatroom)

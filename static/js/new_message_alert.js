@@ -8,7 +8,6 @@ function check_for_new_messages() {
             alert("You have " + new_messages + " new message(s)");
             color_matches_link();
         }
-        //store_new_message_count(result);
 	}});
 }
 
