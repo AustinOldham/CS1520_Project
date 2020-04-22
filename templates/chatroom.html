@@ -37,7 +37,8 @@
 			console.log("messages[i] = " + messages[i]);
 			var obj = JSON.parse(messages[i]);
 
-			var message_date = UTCToLocalDate(new Date(parseInt(obj.time))); //convert date to local timezone for display
+			//var message_date = UTCToLocalDate(new Date(parseInt(obj.time))); //convert date to local timezone for display
+			var message_date = new Date(parseInt(obj.time));
 			console.log(message_date.getTime());
 
 			if(curr_date != getDateString(message_date)){
