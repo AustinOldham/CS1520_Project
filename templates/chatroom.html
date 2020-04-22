@@ -46,7 +46,7 @@
 			console.log(message_date.getDate());
 
 			if(curr_date != message_date.getDate()){
-				curr_date = message_date.getDate();
+				curr_date = (message_date.getMonth()+1) + '/' + message_date.getDate() + '/' + message_date.getFullYear();
 				var date_break = document.createElement("li");
 				date_break.appendChild(document.createTextNode(curr_date));
 				date_break.style.cssText = 'text-align:center;';
@@ -55,7 +55,7 @@
 			}
 
 			if(obj.from_user == '{{current_user}}'){
-				li.innerHTML = "<span style=\"color:blue\">" + message_date.getTime() + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:blue\">" + message_date.getHours() + ':' + message_date.getMinutes() + ' ' + obj.from_user + "</span> " + obj.message;
 			}else{				
 				li.innerHTML = "<span style=\"color:red\">" + message_date.getTime() + ' ' + obj.from_user + "</span> " + obj.message;
 			}
