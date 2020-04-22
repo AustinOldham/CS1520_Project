@@ -6,7 +6,7 @@
 		console.log(date.getTimezoneOffset());
 		console.log(date.getTime());
 		console.log(date.getTime()+date.getTimezoneOffset()*60*1000);
-		return new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
+		return new Date(date.getTime() - date.getTimezoneOffset()*60*1000);
 	}
 
 	function getDateString(date){
@@ -39,7 +39,6 @@
 
 			var message_date = UTCToLocalDate(new Date(parseInt(obj.time))); //convert date to local timezone for display
 			console.log(message_date.getTime());
-			console.log(message_date.getDate());
 
 			if(curr_date != getDateString(message_date)){
 				curr_date = getDateString(message_date);
