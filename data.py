@@ -183,7 +183,7 @@ def save_num_messages(current_user, num_messages):
 
     client = _get_client()
     cookie = load_num_messages(current_user)
-    chatroom['num_messages'] = num_messages
+    cookie['num_messages'] = num_messages
     client.put(chatroom)
 
 def save_new_message_cookie(current_user, num_messages):
