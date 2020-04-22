@@ -182,20 +182,7 @@ def load_chatroom():
 	feed = chatroom['messages']
 	current_user_avatar = data.load_public_user(user).avatar
 	other_user_avatar = data.load_public_user(other).avatar
-	return render_template('chatroom.html', page_title="Chat", current_user=user, current_user_avatar=current_user_avatar, other_user=other, other_user_avatar=other_user_avatar, messages=feed, json_messages=json.dumps({"messages": feed}))
-
-@app.route('/stream/<user>/<other>', methods=['GET', 'POST'])
-def stream(user, other):
-
-    def pushData(message):
-        yield message
-    if request.method == 'POST':
-        username = session['user']
-        now = datetime.datetime.now().replace(microsecond=0).time()
-        message = u'[%s %s] %s' % (now.isoformat(), username, request.form['message'])
-        return Response(pushData(message), mimetype="text/event-stream")
-    return redirect('/chat/' + user + '/' + other)
-
+	return render_template('chatroom.html', page_title="Chat", current_user=user, current_user_avatar=current_user_avatar, other_user=other, other_user_avatar=other_user_avatar, messages=feed)
 
 @app.route('/error')
 def error_page():

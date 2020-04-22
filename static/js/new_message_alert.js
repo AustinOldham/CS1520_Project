@@ -5,7 +5,9 @@ function check_for_new_messages() {
         var num_messages = parseInt(result);
         var new_messages = num_messages - load_current_message_count();
         console.log(new_messages);
-        alert("You have " + new_messages + " new messages");
+        if(new_messages > 0){
+            alert("You have " + new_messages + " new message(s)");
+        }
         store_new_message_count(result);
 	}});
 }
