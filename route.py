@@ -156,12 +156,14 @@ def match_list():
 def count_messages():
 	username = session['user']
 	matched_users = data.get_matched_users(username)
-	total_messages = 0
+	received_messages = 0
 	for other_user in matched_users:
 		chatroom = data.load_chatroom(username, other_user)
 		if chatroom is not None:
-			total_messages += len(chatroom['messages'])
-	return str(total_messages), 200
+			for message in chatroom['messages']:
+				if message.find("from_user\": \"Justin\"") == -1:
+					received_messages += 1
+	return str(received_messages), 200
 
 @app.route('/chat/', methods=['GET','POST'])
 def load_chatroom():
