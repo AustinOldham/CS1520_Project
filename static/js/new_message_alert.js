@@ -1,15 +1,14 @@
 function check_for_new_messages() {
     console.log("running new messages check");
-	$.ajax({url: "/countMessages", success: function(result){
+	$.ajax({url: "/countnewmessages", success: function(result){
         console.log(result);
-        var num_messages = parseInt(result);
-        var new_messages = num_messages - load_current_message_count();
+        var new_messages = parseInt(result);
         console.log(new_messages);
         if(new_messages > 0){
             alert("You have " + new_messages + " new message(s)");
             color_matches_link();
         }
-        store_new_message_count(result);
+        //store_new_message_count(result);
 	}});
 }
 

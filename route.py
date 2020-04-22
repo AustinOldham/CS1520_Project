@@ -152,7 +152,7 @@ def match_list():
 		matched_avatars.append(data.load_public_user(user).avatar)
 	return render_template('matchlist.html', page_title="My Matches", current_user=username, matches=matched_users, matched_avatars=matched_avatars, num_matches=len(matched_users), waiting=liked_users, waiting_avatars=liked_avatars, page_index=0)
 
-@app.route('/countMessages')
+@app.route('/countnewmessages')
 def count_messages():
 	username = session['user']
 	matched_users = data.get_matched_users(username)
@@ -163,7 +163,15 @@ def count_messages():
 			for message in chatroom['messages']:
 				if message.find("from_user\": \""+username+"\"") == -1:
 					received_messages += 1
-	return str(received_messages), 200
+
+	message_cookie = data.load_num_messages(username)
+	if message_cookie is None:
+		data.save_new_message_cookie(username, received_messages)
+		return str(received_messages), 200
+	else:
+		new_messages = received_messages - message_cookie['num_messages']
+		data.save_num_messages(username, received_messages)
+		return str(new_messages), 200
 
 @app.route('/chat/', methods=['GET','POST'])
 def load_chatroom():

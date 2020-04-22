@@ -14,6 +14,7 @@ _PROJECT_ID = 'roommate-tinder0'
 _USER_ENTITY = 'roommate_user'
 _CHATROOM_ENTITY = 'chatroom'
 _RELATIONSHIP_ENTITY = 'roommate_relationship'
+_MESSAGE_COOKIE_ENTITY = 'num_messages_cookie'
 
 MAX_LIKED_TIME = timedelta(days=30)
 
@@ -157,6 +158,47 @@ def save_new_chatroom(current_user, other_user):
 
     entity['key'] = key
     entity['messages'] = []
+    client.put(entity)
+
+def load_num_messages(current_user):
+    """Load current stored number of received messages."""
+
+    client = _get_client()
+    q = client.query(kind=_MESSAGE_COOKIE_ENTITY)
+
+    #generate hash from combination of two usernames
+    keyString = current_user
+    code = keyString1.encode('utf-8')
+    key = hashlib.sha256(code).hexdigest()
+
+    #hash should be one of two values depending on name order
+    q.add_filter('key', '=', key1)
+
+    for cookie in q.fetch():
+        return cookie
+    return None
+
+def save_num_messages(current_user, num_messages):
+    """save JSON object with timestamp, message, and the user who sent the message"""
+
+    client = _get_client()
+    cookie = load_num_messages(current_user)
+    chatroom['num_messages'] = num_messages
+    client.put(chatroom)
+
+def save_new_message_cookie(current_user, num_messages):
+    """Save the updated number of received messages."""
+
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _MESSAGE_COOKIE_ENTITY))
+
+    #generate hash from combination of two usernames
+    keyString = current_user
+    code = keyString.encode('utf-8')
+    key = hashlib.sha256(code).hexdigest()
+
+    entity['key'] = key
+    entity['num_messages'] = num_messages
     client.put(entity)
 
 def load_public_user(username):
