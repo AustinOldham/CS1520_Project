@@ -27,6 +27,29 @@
 		};*/		
 	}
 
+	function UTCToLocalDate(date){
+		var local_date = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
+		var offset = date.getTimezoneOffset()/60
+		var hours = date.getHours();
+		local_date.setHours(hours - offset);
+		return local_date;
+	}
+
+	function getDateString(date){
+		return (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
+	}
+
+	function getTimeString(date){
+		var time_str = '';
+		time_str += date.getHours() + ':';
+		if(date.getMinutes() > 10){
+			time_str += date.getMinutes();
+		}else{
+			time_str += '0' + date.getMinutes();
+		}
+		return time_str;
+	}
+
 	//populate messages using JS
 	function populateMessageList(){
 		console.log("populateMessageList executing");
@@ -40,13 +63,12 @@
 			console.log("messages[i] = " + messages[i]);
 			var obj = JSON.parse(messages[i]);
 
-			var message_date = new Date(parseInt(obj.time));
-			message_date.setTime( message_date.getTime() + message_date.getTimezoneOffset()*60*1000 );
+			var message_date = UTCToLocalDate(new Date(parseInt(obj.time))); //convert date to local timezone for display
 			console.log(message_date.getTime());
 			console.log(message_date.getDate());
 
-			if(curr_date != message_date.getDate()){
-				curr_date = (message_date.getMonth()+1) + '/' + message_date.getDate() + '/' + message_date.getFullYear();
+			if(curr_date != getDateString(message_date)){
+				curr_date = getDateString(message_date);
 				var date_break = document.createElement("li");
 				date_break.appendChild(document.createTextNode(curr_date));
 				date_break.style.cssText = 'text-align:center;';
@@ -54,10 +76,11 @@
 				ul.appendChild(document.createElement("br"));
 			}
 
+			var time_str = getTimeString(message_date);
 			if(obj.from_user == '{{current_user}}'){
-				li.innerHTML = "<span style=\"color:blue\">" + message_date.getHours() + ':' + message_date.getMinutes() + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:blue\">" + time_str + ' ' + obj.from_user + "</span> " + obj.message;
 			}else{				
-				li.innerHTML = "<span style=\"color:red\">" + message_date.getTime() + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:red\">" + time_str + ' ' + obj.from_user + "</span> " + obj.message;
 			}
 
 			//li.classList.add("pull-left");
