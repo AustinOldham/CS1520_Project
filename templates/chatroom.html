@@ -40,10 +40,13 @@
 			console.log("messages[i] = " + messages[i]);
 			var obj = JSON.parse(messages[i]);
 
-			var datetime = obj.time.split(", ");
+			var message_date = new Date(parseInt(obj.time));
+			message_date.setTime( message_date.getTime() + message_date.getTimezoneOffset()*60*1000 );
+			console.log(message_date.getTime());
+			console.log(message_date.getDate());
 
-			if(curr_date != datetime[0]){
-				curr_date = datetime[0];
+			if(curr_date != message_date.getDate()){
+				curr_date = message_date.getDate();
 				var date_break = document.createElement("li");
 				date_break.appendChild(document.createTextNode(curr_date));
 				date_break.style.cssText = 'text-align:center;';
@@ -52,9 +55,9 @@
 			}
 
 			if(obj.from_user == '{{current_user}}'){
-				li.innerHTML = "<span style=\"color:blue\">" + datetime[1] + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:blue\">" + message_date.getTime() + ' ' + obj.from_user + "</span> " + obj.message;
 			}else{				
-				li.innerHTML = "<span style=\"color:red\">" + datetime[1] + ' ' + obj.from_user + "</span> " + obj.message;
+				li.innerHTML = "<span style=\"color:red\">" + message_date.getTime() + ' ' + obj.from_user + "</span> " + obj.message;
 			}
 
 			//li.classList.add("pull-left");
