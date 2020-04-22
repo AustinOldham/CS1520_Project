@@ -3,13 +3,16 @@ from datetime import datetime, timezone, timedelta
 
 import hashlib
 import random
+import json
 
 
 # This code is based on the code found at https://github.com/timothyrjames/cs1520 with permission from the instructor
 
 _PROJECT_ID = 'squarerush'
 _USER_ENTITY = 'roommate_user'
+_CHATROOM_ENTITY = 'chatroom'
 _RELATIONSHIP_ENTITY = 'roommate_relationship'
+_MESSAGE_COOKIE_ENTITY = 'num_messages_cookie'
 
 MAX_LIKED_TIME = timedelta(days=30)
 
@@ -101,6 +104,99 @@ def load_user(username, passwordhash):
         return User(username=user['username'], email=user['email'], about=user['about'], firstname=user['firstname'], lastname=user['lastname'], age=user['age'], gender=user['gender'], state=user['state'], city=user['city'], address=user['address'], bio=user['bio'], avatar=user['avatar'])
     return None
 
+def load_chatroom(current_user, other_user):
+    """Load a chatroom based on the hash of the two usernames; if the hash doesn't match
+    the username, then this should return None."""
+
+    client = _get_client()
+    q1 = client.query(kind=_CHATROOM_ENTITY)
+    q2 = client.query(kind=_CHATROOM_ENTITY)
+
+    #generate hash from combination of two usernames
+    keyString1 = current_user + other_user
+    keyString2 = other_user + current_user
+    code1 = keyString1.encode('utf-8')
+    code2 = keyString2.encode('utf-8')
+    key1 = hashlib.sha256(code1).hexdigest()
+    key2 = hashlib.sha256(code2).hexdigest()
+
+    #hash should be one of two values depending on name order
+    q1.add_filter('key', '=', key1)
+    q2.add_filter('key', '=', key2)
+
+    for chatroom in q1.fetch():
+        return chatroom
+    for chatroom in q2.fetch():
+        return chatroom
+    return None
+
+def save_message(current_user, other_user, message):
+    """save JSON object with timestamp, message, and the user who sent the message"""
+
+    client = _get_client()
+    chatroom = load_chatroom(current_user, other_user)
+
+    current_time = datetime.now(timezone.utc)
+    epoch_ms = current_time.timestamp() * 1000   #utc ms timestamp
+    dump = json.dumps({"time": str(epoch_ms), "from_user": current_user, "message": message})
+    chatroom['messages'].append(dump)
+    client.put(chatroom)
+
+def save_new_chatroom(current_user, other_user):
+    """Save the chatroom details to the datastore."""
+
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _CHATROOM_ENTITY))
+
+    #generate hash from combination of two usernames
+    keyString = current_user + other_user
+    code = keyString.encode('utf-8')
+    key = hashlib.sha256(code).hexdigest()
+
+    entity['key'] = key
+    entity['messages'] = []
+    client.put(entity)
+
+def load_num_messages(current_user):
+    """Load current stored number of received messages."""
+
+    client = _get_client()
+    q = client.query(kind=_MESSAGE_COOKIE_ENTITY)
+
+    #generate hash from combination of two usernames
+    keyString = current_user
+    code = keyString.encode('utf-8')
+    key = hashlib.sha256(code).hexdigest()
+
+    #hash should be one of two values depending on name order
+    q.add_filter('key', '=', key)
+
+    for cookie in q.fetch():
+        return cookie
+    return None
+
+def save_num_messages(current_user, num_messages):
+    """save JSON object with timestamp, message, and the user who sent the message"""
+
+    client = _get_client()
+    cookie = load_num_messages(current_user)
+    cookie['num_messages'] = num_messages
+    client.put(cookie)
+
+def save_new_message_cookie(current_user, num_messages):
+    """Save the updated number of received messages."""
+
+    client = _get_client()
+    entity = datastore.Entity(_load_key(client, _MESSAGE_COOKIE_ENTITY))
+
+    #generate hash from combination of two usernames
+    keyString = current_user
+    code = keyString.encode('utf-8')
+    key = hashlib.sha256(code).hexdigest()
+
+    entity['key'] = key
+    entity['num_messages'] = num_messages
+    client.put(entity)
 
 def load_public_user(username):
     """Returns a user object that contains information that anyone can view."""
