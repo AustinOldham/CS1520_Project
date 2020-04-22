@@ -161,7 +161,7 @@ def count_messages():
 		chatroom = data.load_chatroom(username, other_user)
 		if chatroom is not None:
 			for message in chatroom['messages']:
-				if message.find("from_user\": \"Justin\"") == -1:
+				if message.find("from_user\": \""+username+"\"") == -1:
 					received_messages += 1
 	return str(received_messages), 200
 
